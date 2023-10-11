@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
+	"github.com/neutralparadoxdev/rename-forums/goforum/internal/webapi"
 )
 
 func main() {
-	app := fiber.New()
+	a := core.App{
+		ApiDriver: &webapi.WebApi{},
+	}
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World")
-	})
+	a.Init()
+	a.Run()
 
-	app.Listen(":3001")
 }
