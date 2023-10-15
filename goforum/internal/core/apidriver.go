@@ -1,6 +1,6 @@
 package core
 
 type ApiDriver interface {
-	Init() error
+	Init(app *App) error
 	Run() error
 }
