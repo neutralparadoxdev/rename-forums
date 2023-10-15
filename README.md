@@ -37,9 +37,11 @@ The REST api will provide access to all information stored in storage.
 
 /api/user/create
 
-##### Create Session/POST
+##### Create Session/POST ✅
 
-/api/session
+Work Status: Endpoint created
+
+/api/session/new
 
 ##### Delete Session/DELETE
 
