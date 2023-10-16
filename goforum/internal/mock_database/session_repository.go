@@ -9,6 +9,10 @@ func (repo *SessionRepository) GetById() (*core.Session, error) {
 	return nil, nil
 }
 
+func (repo *SessionRepository) DoesSessionExist(session core.Session) (bool, error) {
+	return true, nil
+}
+
 func (repo *SessionRepository) Delete(session core.Session) error {
 	return nil
 }

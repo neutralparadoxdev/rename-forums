@@ -4,6 +4,12 @@ type Session struct {
 	session string /* json webtoken */
 }
 
+func NewSession(token string) Session {
+	return Session{
+		session: token,
+	}
+}
+
 func (session *Session) ToString() string {
 	return session.session
 }

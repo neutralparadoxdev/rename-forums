@@ -2,6 +2,8 @@ package core
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -38,7 +40,8 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 				"username": user.Username,
 				"userId":   user.UserId,
-				"nbf":      time.Now(),
+				"nbf":      time.Now().Unix(),
+				"exp":      time.Now().Add(time.Hour * 24).Unix(),
 			})
 
 			tokenString, err := token.SignedString([]byte(man.secret))
@@ -57,4 +60,37 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 		}
 	}
 	return Session{}, nil
+}
+
+func (man *SessionManager) DeleteSession(session Session) error {
+	token, err := jwt.Parse(session.session, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			log.Printf("unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(man.secret), nil
+	})
+
+	if err != nil {
+		log.Printf("DeleteSession Error: %v", err)
+		return err
+	}
+
+	if !token.Valid {
+		return errors.New("not a valid token. potentially an attacker")
+	}
+	res, err := man.sessionRepository.DoesSessionExist(session)
+
+	if err != nil {
+		return err
+	}
+
+	if res {
+		man.sessionRepository.Delete(session)
+		return nil
+	} else {
+		return errors.New("session: cannot delete a session that doesn't exist")
+	}
 }
