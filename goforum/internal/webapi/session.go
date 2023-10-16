@@ -32,4 +32,24 @@ func MountSession(router fiber.Router, app *core.App) {
 		return c.SendString(session.ToString())
 	})
 
+	group.Delete("/", func(c *fiber.Ctx) error {
+		headers := c.GetReqHeaders()
+		value, exists := headers["Bearer-Token"]
+
+		if exists {
+			err := app.GetSessionManager().DeleteSession(core.NewSession(value))
+
+			if err != nil {
+				log.Printf("/api/session[delete]: error while Deleting session: %v", err)
+				return c.SendStatus(400)
+			} else {
+				return c.SendStatus(204)
+			}
+
+		} else {
+			return c.SendStatus(400)
+		}
+
+	})
+
 }
