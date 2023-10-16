@@ -33,29 +33,47 @@ The REST api will provide access to all information stored in storage.
 
 /api/forum/</name/>/</postname/>?comment_length=</number/>&comment_depth=</number/>&max_comment=</number/>
 
-##### Create User/POST
+### User 
 
-/api/user/create
+#### \[POST\] /api/user/create
 
-##### Create Session/POST ✅
+Work Status: Not Start
 
-Work Status: Endpoint created
+#### \[Get\] /api/user/<username>
 
-/api/session/new
+Description: Gets User Data. If the requester is authenticated, potentially returns more data for self.
 
-##### Delete Session/DELETE ✅
+Work Status: Not Started
+
+### Session
+
+##### ✅ \[POST\] /api/session/new 
+
+body(forum|json): username & password
+
+return data: Bearer-Token
+
+Description: Creates a new session using username password
 
 Work Status: Endpoint Functional
 
-/api/session
+##### ✅ \[Delete\] /api/session
 
-##### Refresh Session/POST
+header: Bearer-Token
 
-/api/session
+body: none
 
-##### Get User/GET
+Work Status: Endpoint Functional
 
-/api/user/username
+#### \[POST\] /api/session
+
+header: Bearer-Token
+
+body: none
+
+return data: New Bearer-Token
+
+Work Status: Not Started
 
 #### Event Websocket
 
