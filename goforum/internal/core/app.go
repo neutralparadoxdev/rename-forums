@@ -17,9 +17,11 @@ type App struct {
 }
 
 func (app *App) Init(config AppConfig) error {
-	if err := app.ApiDriver.Init(app); err != nil {
-		log.Fatal(err)
-		return err
+	if app.ApiDriver != nil {
+		if err := app.ApiDriver.Init(app); err != nil {
+			log.Fatal(err)
+			return err
+		}
 	}
 
 	app.Authenticator = &Authenticator{}
@@ -29,8 +31,9 @@ func (app *App) Init(config AppConfig) error {
 }
 
 func (app *App) Run() {
-
-	app.ApiDriver.Run()
+	if app.ApiDriver != nil {
+		app.ApiDriver.Run()
+	}
 }
 
 func (app *App) GetSessionManager() *SessionManager {
