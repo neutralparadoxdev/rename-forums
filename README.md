@@ -43,7 +43,9 @@ Work Status: Endpoint created
 
 /api/session/new
 
-##### Delete Session/DELETE
+##### Delete Session/DELETE ✅
+
+Work Status: Endpoint Functional
 
 /api/session
 
