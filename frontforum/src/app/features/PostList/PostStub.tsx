@@ -2,7 +2,7 @@
 
 export type PostStubProps = {
     title: string
-    user: string
+    authorName: string
     id: string
     subforum: string
 }
