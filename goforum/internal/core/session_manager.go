@@ -30,7 +30,7 @@ func NewSessionManager(
 }
 
 func (man *SessionManager) CreateSession(username string, password string) (Session, error) {
-	if user, err := man.userManager.GetUserByName(username); err == nil {
+	if user, err := man.userManager.GetUserByName(username); err == nil && user != nil {
 		ok, err := man.auth.Check(password, user.Password)
 
 		if err != nil {

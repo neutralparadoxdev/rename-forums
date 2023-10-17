@@ -7,7 +7,7 @@ import (
 func TestSessionManager(t *testing.T) {
 	secret := "AbsoluteSecret"
 
-	userMan := NewUserManager(nil)
+	userMan := NewUserManager(nil, nil)
 	auth := NewAuthenticator()
 
 	got := NewSessionManager(secret, userMan, auth, nil)

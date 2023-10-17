@@ -3,10 +3,15 @@ package mockdatabase
 import "github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
 
 type MockDatabase struct {
+	session SessionRepository
+	user    UserRepository
 }
 
-func new() MockDatabase {
-	return MockDatabase{}
+func New() *MockDatabase {
+	return &MockDatabase{
+		session: SessionRepository{},
+		user:    *NewUserRepository(),
+	}
 }
 
 func (db *MockDatabase) Init() error {
@@ -14,9 +19,9 @@ func (db *MockDatabase) Init() error {
 }
 
 func (db *MockDatabase) GetSessionRepository() core.SessionRepository {
-	return &SessionRepository{}
+	return &db.session
 }
 
 func (db *MockDatabase) GetUserRepository() core.UserRepository {
-	return &UserRepository{}
+	return &db.user
 }
