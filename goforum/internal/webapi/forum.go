@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -78,6 +79,7 @@ func MountForum(router fiber.Router, app *core.App) {
 			Title      string    `json:"title"`
 			AuthorName string    `json:"authorName"`
 			CreatedAt  time.Time `json:"createdAt"`
+			Id         string    `json:"id"`
 		}
 
 		type CompleteForumDTO struct {
@@ -92,6 +94,7 @@ func MountForum(router fiber.Router, app *core.App) {
 				Title:      v.Title,
 				AuthorName: v.AuthorName,
 				CreatedAt:  v.CreatedAt,
+				Id:         fmt.Sprintf("%d", v.Id),
 			})
 		}
 

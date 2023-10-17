@@ -27,6 +27,14 @@ func NewForumRepository() *ForumRepository {
 		UserJoinListIds: make([]int64, 0),
 	}
 
+	forums["privatemath"] = core.Forum{
+		Title:           "private math",
+		Description:     "Private Math Forum",
+		IsPublic:        false,
+		OwnerListIds:    append(make([]int64, 1), 12),
+		UserJoinListIds: make([]int64, 0),
+	}
+
 	return &ForumRepository{
 		forums: forums,
 	}

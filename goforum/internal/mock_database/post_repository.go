@@ -23,6 +23,16 @@ func NewPostRepository(users *UserRepository) *PostRepository {
 		OwnerId:         12,
 		AuthorName:      "hello",
 	}
+
+	posts[1] = core.Post{
+		Title:           "Private Math first post",
+		Body:            "This is the body for the post for privat emath",
+		Id:              5,
+		ForumPostedName: "privatemath",
+		OwnerId:         12,
+		AuthorName:      "hello",
+	}
+
 	return &PostRepository{
 		posts: posts,
 		users: users,
@@ -59,4 +69,13 @@ func (repo *PostRepository) Create(title string, body string, forumName string, 
 		AuthorName:      user.Username,
 	}
 	return true, nil
+}
+
+func (repo *PostRepository) GetPost(postId int64) (*core.Post, error) {
+	for _, v := range repo.posts {
+		if v.Id == postId {
+			return &v, nil
+		}
+	}
+	return nil, nil
 }
