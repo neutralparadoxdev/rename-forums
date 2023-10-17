@@ -20,5 +20,8 @@ func (man *PostManager) GetPosts(forumName string) ([]Post, error) {
 	}
 
 	return posts, nil
+}
 
+func (man *PostManager) CreatePost(title string, body string, forumName string, userId int64) (bool, error) {
+	return man.db.GetPostRepository().Create(title, body, forumName, userId)
 }

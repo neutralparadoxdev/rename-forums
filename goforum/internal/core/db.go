@@ -24,7 +24,7 @@ type ForumRepository interface {
 }
 
 type UserRepository interface {
-	GetById() (*User, error)
+	GetById(id int64) (*User, error)
 	GetByName(username string) (*User, error)
 	GetByEmail(email string) (*User, error)
 	Delete(user User) error
@@ -34,4 +34,5 @@ type UserRepository interface {
 
 type PostRepository interface {
 	GetPostsOnForum(forumName string) ([]Post, error)
+	Create(title string, body string, forumName string, userId int64) (bool, error)
 }

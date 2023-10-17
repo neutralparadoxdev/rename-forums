@@ -54,9 +54,9 @@ func (repo *UserRepository) GetByEmail(email string) (*core.User, error) {
 	return nil, nil
 }
 
-func (repo *UserRepository) GetById() (*core.User, error) {
+func (repo *UserRepository) GetById(id int64) (*core.User, error) {
 	for _, val := range repo.users {
-		if val.UserId == 121 {
+		if val.UserId == id {
 			return &val, nil
 		}
 	}
