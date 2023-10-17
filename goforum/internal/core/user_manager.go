@@ -2,7 +2,6 @@ package core
 
 import (
 	"errors"
-	"log"
 )
 
 type UserManager struct {
@@ -46,7 +45,6 @@ func (man *UserManager) CreateUser(username string, email string, password strin
 	}
 
 	if existingUser != nil {
-		log.Printf("email exists: %s(%s)", email, hashedEmail)
 		return nil, errors.New("create_user: pre-existing email found")
 	}
 
