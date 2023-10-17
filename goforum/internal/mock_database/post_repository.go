@@ -1,12 +1,18 @@
 package mockdatabase
 
-import "github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
+import (
+	"math/rand"
+	"time"
+
+	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
+)
 
 type PostRepository struct {
 	posts map[int64]core.Post
+	users *UserRepository
 }
 
-func NewPostRepository() *PostRepository {
+func NewPostRepository(users *UserRepository) *PostRepository {
 	posts := make(map[int64]core.Post)
 
 	posts[1] = core.Post{
@@ -19,6 +25,7 @@ func NewPostRepository() *PostRepository {
 	}
 	return &PostRepository{
 		posts: posts,
+		users: users,
 	}
 }
 
@@ -32,4 +39,24 @@ func (repo *PostRepository) GetPostsOnForum(forumName string) ([]core.Post, erro
 	}
 
 	return out, nil
+}
+
+func (repo *PostRepository) Create(title string, body string, forumName string, userId int64) (bool, error) {
+	id := rand.Int63()
+
+	user, err := repo.users.GetById(userId)
+
+	if err != nil {
+		return false, err
+	}
+
+	repo.posts[id] = core.Post{
+		Title:           title,
+		Body:            body,
+		ForumPostedName: forumName,
+		CreatedAt:       time.Now(),
+		OwnerId:         userId,
+		AuthorName:      user.Username,
+	}
+	return true, nil
 }
