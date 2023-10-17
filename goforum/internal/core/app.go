@@ -24,8 +24,8 @@ func (app *App) Init(config AppConfig) error {
 		}
 	}
 
-	app.Authenticator = &Authenticator{}
-	app.UserManager = NewUserManager(app.Database)
+	app.Authenticator = NewAuthenticator()
+	app.UserManager = NewUserManager(app.Database, app.Authenticator)
 	app.sessionManager = NewSessionManager(config.TokenSecret, app.UserManager, app.Authenticator, app.Database.GetSessionRepository())
 	return nil
 }
@@ -38,4 +38,8 @@ func (app *App) Run() {
 
 func (app *App) GetSessionManager() *SessionManager {
 	return app.sessionManager
+}
+
+func (app *App) GetUserManager() *UserManager {
+	return app.UserManager
 }

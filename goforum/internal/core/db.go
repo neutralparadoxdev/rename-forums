@@ -17,6 +17,7 @@ type SessionRepository interface {
 type UserRepository interface {
 	GetById() (*User, error)
 	GetByName(username string) (*User, error)
+	GetByEmail(email string) (*User, error)
 	Delete(user User) error
 	Create(user User) (*User, error)
 	Save(user User) error

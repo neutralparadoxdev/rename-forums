@@ -9,7 +9,7 @@ import (
 func main() {
 	a := core.App{
 		ApiDriver: &webapi.WebApi{},
-		Database:  &mockdatabase.MockDatabase{},
+		Database:  mockdatabase.New(),
 	}
 
 	config := core.AppConfig{

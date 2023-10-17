@@ -1,13 +1,15 @@
 package core
 
+import "time"
+
 type User struct {
 	Username     string
 	Password     string
-	UserId       string
+	UserId       int64
 	Email        string
-	CreatedAt    string
-	LastModified string
-	LastLogin    string
+	CreatedAt    time.Time
+	LastModified time.Time
+	LastLogin    time.Time
 	Locked       bool
 }
 
@@ -16,10 +18,10 @@ func DefaultUser() User {
 		Username:     "Something",
 		Password:     "Else",
 		Email:        "Somethingelse@example.com",
-		CreatedAt:    "Not Today",
-		LastModified: "Yesterday",
-		LastLogin:    "Today",
-		UserId:       "4324i23ou4o23iu4oi",
+		CreatedAt:    time.Now(),
+		LastModified: time.Now(),
+		LastLogin:    time.Now(),
+		UserId:       121231231,
 		Locked:       false,
 	}
 }
