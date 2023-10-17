@@ -19,3 +19,7 @@ func (man *ForumManager) GetAll(userId *int64) ([]Forum, error) {
 	repo := man.db.GetForumRepository()
 	return repo.GetAll(userId)
 }
+
+func (man *ForumManager) GetForum(forumName string) (*Forum, error) {
+	return man.db.GetForumRepository().GetByName(forumName)
+}
