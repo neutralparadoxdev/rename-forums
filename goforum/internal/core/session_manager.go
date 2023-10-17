@@ -39,7 +39,7 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 		if ok {
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 				"username": user.Username,
-				"userId":   user.UserId,
+				"userId":   fmt.Sprintf("%d", user.UserId),
 				"nbf":      time.Now().Unix(),
 				"exp":      time.Now().Add(time.Hour * 24).Unix(),
 			})
@@ -60,6 +60,40 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 		}
 	}
 	return Session{}, nil
+}
+
+func (man *SessionManager) VerifySession(session *Session) (bool, error) {
+	token, err := jwt.Parse(session.session, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			log.Printf("unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(man.secret), nil
+	})
+
+	if err != nil {
+		log.Printf("DeleteSession Error: %v", err)
+		return false, err
+	}
+
+	if !token.Valid {
+		return false, errors.New("not a valid token. potentially an attacker")
+	}
+
+	isPresent, err := man.sessionRepository.DoesSessionExist(*session)
+
+	if err != nil {
+		return false, err
+	}
+
+	if !isPresent {
+		return false, nil
+	} else {
+		session.Token = token
+		return true, nil
+	}
 }
 
 func (man *SessionManager) DeleteSession(session Session) error {

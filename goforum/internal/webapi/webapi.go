@@ -17,6 +17,7 @@ func (w *WebApi) Init(app *core.App) error {
 
 	MountSession(w.fiberApp, app)
 	MountUser(w.fiberApp, app)
+	MountForum(w.fiberApp, app)
 
 	return nil
 }
