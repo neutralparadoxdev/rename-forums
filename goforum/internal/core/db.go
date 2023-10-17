@@ -4,6 +4,7 @@ type Database interface {
 	GetSessionRepository() SessionRepository
 	GetUserRepository() UserRepository
 	GetForumRepository() ForumRepository
+	GetPostRepository() PostRepository
 	Init() error
 }
 
@@ -29,4 +30,8 @@ type UserRepository interface {
 	Delete(user User) error
 	Create(user User) (*User, error)
 	Save(user User) error
+}
+
+type PostRepository interface {
+	GetPostsOnForum(forumName string) ([]Post, error)
 }

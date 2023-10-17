@@ -15,6 +15,7 @@ type App struct {
 	Authenticator  *Authenticator
 	Database       Database
 	ForumManager   *ForumManager
+	PostManager    *PostManager
 }
 
 func (app *App) Init(config AppConfig) error {
@@ -29,6 +30,8 @@ func (app *App) Init(config AppConfig) error {
 	app.UserManager = NewUserManager(app.Database, app.Authenticator)
 	app.sessionManager = NewSessionManager(config.TokenSecret, app.UserManager, app.Authenticator, app.Database.GetSessionRepository())
 	app.ForumManager = NewForumManager(app.Database)
+	app.PostManager = NewPostManager(app.Database)
+
 	return nil
 }
 
@@ -48,4 +51,8 @@ func (app *App) GetUserManager() *UserManager {
 
 func (app *App) GetForumManager() *ForumManager {
 	return app.ForumManager
+}
+
+func (app *App) GetPostManager() *PostManager {
+	return app.PostManager
 }

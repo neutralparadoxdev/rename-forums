@@ -1,6 +1,9 @@
 package webapi
 
 import (
+	"log"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
 )
@@ -49,6 +52,56 @@ func MountForum(router fiber.Router, app *core.App) {
 			return c.SendStatus(500)
 		}
 		return c.SendStatus(201)
+	})
+
+	group.Get("/:forumName", func(c *fiber.Ctx) error {
+		forumName := c.Params("forumName")
+
+		forum, err := app.GetForumManager().GetForum(forumName)
+
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		if forum == nil {
+			log.Printf("Forum Not found")
+			return c.SendStatus(404)
+		}
+
+		posts, err := app.GetPostManager().GetPosts(forumName)
+
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		type PostDTO struct {
+			Title      string    `json:"title"`
+			AuthorName string    `json:"authorName"`
+			CreatedAt  time.Time `json:"createdAt"`
+		}
+
+		type CompleteForumDTO struct {
+			Title       string    `json:"title"`
+			Description string    `json:"description"`
+			Posts       []PostDTO `json:"posts"`
+		}
+
+		postsdto := make([]PostDTO, 0)
+		for _, v := range posts {
+			postsdto = append(postsdto, PostDTO{
+				Title:      v.Title,
+				AuthorName: v.AuthorName,
+				CreatedAt:  v.CreatedAt,
+			})
+		}
+
+		forumResponse := CompleteForumDTO{
+			Title:       forum.Title,
+			Description: forum.Description,
+			Posts:       postsdto,
+		}
+
+		return c.JSON(forumResponse)
 	})
 
 	group.Get("/", func(c *fiber.Ctx) error {
