@@ -33,6 +33,12 @@ The REST api will provide access to all information stored in storage.
 
 /api/forum/</name/>/</postname/>?comment_length=</number/>&comment_depth=</number/>&max_comment=</number/>
 
+### Post
+
+#### ✅ \[POST\] /api/post \[AUTH Required\]
+
+Description: Posts a new post with the body of "title, body, forumName" using the auth token
+
 ### Forum
 
 #### ✅ \[POST\] /api/forum \[AUTH Required\]
