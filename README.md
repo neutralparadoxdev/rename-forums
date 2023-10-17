@@ -33,6 +33,20 @@ The REST api will provide access to all information stored in storage.
 
 /api/forum/</name/>/</postname/>?comment_length=</number/>&comment_depth=</number/>&max_comment=</number/>
 
+### Forum
+
+#### ✅ \[POST\] /api/forum \[AUTH Required\]
+
+Description: Create a new Forum by provide a json body with title and description strings.
+
+Work Status: Done
+
+#### ✅ \[GET\] /api/forum 
+
+Description: Retrieve list of public forums. If authenticated, the list will include private forums you joined / owned.
+
+Work Status: Done but not paginated. Work in the future for pagination.
+
 ### User 
 
 #### ✅ \[POST\] /api/user
