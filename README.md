@@ -47,6 +47,12 @@ Description: Retrieve list of public forums. If authenticated, the list will inc
 
 Work Status: Done but not paginated. Work in the future for pagination.
 
+#### ✅ \[GET\] /api/forum/<forum_name>
+
+Description: Retrieves the forum + posts for the given name
+
+Work Status: Done. However, does not hide private forums.
+
 ### User 
 
 #### ✅ \[POST\] /api/user
