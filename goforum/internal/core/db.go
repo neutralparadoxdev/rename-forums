@@ -35,4 +35,5 @@ type UserRepository interface {
 type PostRepository interface {
 	GetPostsOnForum(forumName string) ([]Post, error)
 	Create(title string, body string, forumName string, userId int64) (bool, error)
+	GetPost(userId int64) (*Post, error)
 }
