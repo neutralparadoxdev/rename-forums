@@ -19,7 +19,7 @@ type ForumRepository interface {
 	GetByName(name string) (*Forum, error)
 	Delete(forum Forum) error
 	Create(title string, description string, ownerId int64) error
-	GetAll() ([]Forum, error)
+	GetAll(userId *int64) ([]Forum, error)
 }
 
 type UserRepository interface {
