@@ -39,6 +39,12 @@ The REST api will provide access to all information stored in storage.
 
 Description: Posts a new post with the body of "title, body, forumName" using the auth token
 
+#### ✅ \[GET\] /api/post/<forum_name>/<post_id> \[AUTH OPTIONAL\]
+
+Description: Get Post with Id
+
+Work: Status Done.
+
 ### Forum
 
 #### ✅ \[POST\] /api/forum \[AUTH Required\]
