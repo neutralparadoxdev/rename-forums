@@ -14,3 +14,8 @@ func (man *ForumManager) CreateForum(title, description string, ownerId int64) e
 	repo := man.db.GetForumRepository()
 	return repo.Create(title, description, ownerId)
 }
+
+func (man *ForumManager) GetAll(userId *int64) ([]Forum, error) {
+	repo := man.db.GetForumRepository()
+	return repo.GetAll(userId)
+}
