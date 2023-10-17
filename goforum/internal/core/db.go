@@ -3,6 +3,7 @@ package core
 type Database interface {
 	GetSessionRepository() SessionRepository
 	GetUserRepository() UserRepository
+	GetForumRepository() ForumRepository
 	Init() error
 }
 
@@ -12,6 +13,13 @@ type SessionRepository interface {
 	Delete(session Session) error
 	Create(userid string, username string) (*Session, error)
 	Save(session Session) error
+}
+
+type ForumRepository interface {
+	GetByName(name string) (*Forum, error)
+	Delete(forum Forum) error
+	Create(title string, description string, ownerId int64) error
+	GetAll() ([]Forum, error)
 }
 
 type UserRepository interface {
