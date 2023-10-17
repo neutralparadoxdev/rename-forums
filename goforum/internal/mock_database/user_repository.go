@@ -21,7 +21,7 @@ func NewUserRepository() *UserRepository {
 		Password: "$argon2id$v=19$m=65536,t=3,p=4$9SuvMHDGhFZrZYUPOUvjlQ$4/fDdP7ar1ehn2Bu0Yw1QP0FVUyy33IEHOO8EwctRH8",
 		/// email is : hello@example.com
 		Email:        "$argon2id$v=19$m=65536,t=3,p=4$Ng66YSm0nj0sSqiEpJjDhg$S5P4xf2+Ma+QzGISAtdGJEeVaKTFdYdIz+0Dk74xIYY",
-		UserId:       rand.Int63(),
+		UserId:       12,
 		CreatedAt:    time.Now(),
 		LastModified: time.Now(),
 		LastLogin:    time.Now(),

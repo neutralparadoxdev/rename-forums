@@ -7,8 +7,22 @@ type ForumRepository struct {
 }
 
 func NewForumRepository() *ForumRepository {
+	forums := make(map[string]core.Forum)
+
+	forums["Science"] = core.Forum{
+		Title:        "Science",
+		Description:  "Some Science",
+		OwnerListIds: append(make([]int64, 1), 12),
+	}
+
+	forums["Math"] = core.Forum{
+		Title:        "Math",
+		Description:  "Math Forum",
+		OwnerListIds: append(make([]int64, 1), 12),
+	}
+
 	return &ForumRepository{
-		forums: make(map[string]core.Forum),
+		forums: forums,
 	}
 }
 
