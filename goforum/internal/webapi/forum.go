@@ -57,7 +57,7 @@ func MountForum(router fiber.Router, app *core.App) {
 
 		var session core.Session
 
-		type ForumReponse struct {
+		type ForumReponseDTO struct {
 			Title       string `json:"title"`
 			Description string `json:"description"`
 		}
@@ -85,9 +85,9 @@ func MountForum(router fiber.Router, app *core.App) {
 				return c.SendStatus(500)
 			}
 
-			response := make([]ForumReponse, 0)
+			response := make([]ForumReponseDTO, 0)
 			for _, v := range listOfForums {
-				response = append(response, ForumReponse{
+				response = append(response, ForumReponseDTO{
 					Title:       v.Title,
 					Description: v.Description,
 				})
@@ -101,9 +101,9 @@ func MountForum(router fiber.Router, app *core.App) {
 			return c.SendStatus(500)
 		}
 
-		response := make([]ForumReponse, 0)
+		response := make([]ForumReponseDTO, 0)
 		for _, v := range listOfForums {
-			response = append(response, ForumReponse{
+			response = append(response, ForumReponseDTO{
 				Title:       v.Title,
 				Description: v.Description,
 			})
