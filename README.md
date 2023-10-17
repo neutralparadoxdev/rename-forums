@@ -35,9 +35,11 @@ The REST api will provide access to all information stored in storage.
 
 ### User 
 
-#### \[POST\] /api/user/create
+#### ✅ \[POST\] /api/user
 
-Work Status: Not Start
+Description: Creates a new User.
+
+Work Status: Creates the User
 
 #### \[Get\] /api/user/<username>
 
