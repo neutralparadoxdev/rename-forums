@@ -81,7 +81,7 @@ Work Status: Not Started
 
 ### Session
 
-##### ✅ \[POST\] /api/session/new 
+#### ✅ \[POST\] /api/session/new 
 
 body(forum|json): username & password
 
@@ -91,7 +91,7 @@ Description: Creates a new session using username password
 
 Work Status: Endpoint Functional
 
-##### ✅ \[Delete\] /api/session
+#### ✅ \[Delete\] /api/session
 
 header: Bearer-Token
 
@@ -108,6 +108,17 @@ body: none
 return data: New Bearer-Token
 
 Work Status: Not Started
+
+### Group
+
+Description: Manages a group of posts that belong to 1 or more unlinked forums
+
+#### ✅ \[GET\] /api/group \[AUTH Optiona\]
+
+return data: posts
+
+Work Status: Returns everything for now.
+
 
 #### Event Websocket
 
