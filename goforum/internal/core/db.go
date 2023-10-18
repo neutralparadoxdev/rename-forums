@@ -9,10 +9,8 @@ type Database interface {
 }
 
 type SessionRepository interface {
-	GetById() (*Session, error)
 	DoesSessionExist(session Session) (bool, error)
 	Delete(session Session) error
-	Create(userid string, username string) (*Session, error)
 	Save(session Session) error
 }
 
