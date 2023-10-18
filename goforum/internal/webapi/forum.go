@@ -13,22 +13,18 @@ func MountForum(router fiber.Router, app *core.App) {
 	group := router.Group("/api/forum")
 
 	group.Post("/", func(c *fiber.Ctx) error {
-		headers := c.GetReqHeaders()
-		jwtString, exists := headers["Bearer-Token"]
+		session, webApiErr := CheckForSession(c, app.GetSessionManager())
 
-		var session core.Session
-
-		if exists {
-			session = core.NewSession(jwtString)
-			ok, err := app.GetSessionManager().VerifySession(&session)
-
-			if err != nil {
-				return c.SendStatus(500)
+		if webApiErr != nil {
+			if webApiErr.Code == WebApiErrorTokenValidationFailed.Code {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(fiber.StatusInternalServerError)
 			}
+		}
 
-			if !ok {
-				return c.SendStatus(400)
-			}
+		if session == nil {
+			return c.SendStatus(fiber.StatusUnauthorized)
 		}
 
 		type NewForumRequest struct {
@@ -108,28 +104,23 @@ func MountForum(router fiber.Router, app *core.App) {
 	})
 
 	group.Get("/", func(c *fiber.Ctx) error {
-		headers := c.GetReqHeaders()
-		jwtString, exists := headers["Bearer-Token"]
+		session, webErr := CheckForSession(c, app.GetSessionManager())
 
-		var session core.Session
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(401)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
 
 		type ForumReponseDTO struct {
 			Title       string `json:"title"`
 			Description string `json:"description"`
 		}
 
-		if exists {
-			session = core.NewSession(jwtString)
-			ok, err := app.GetSessionManager().VerifySession(&session)
-
-			if err != nil {
-				return c.SendStatus(500)
-			}
-
-			if !ok {
-				return c.SendStatus(400)
-			}
-
+		if session != nil {
 			userId, err := session.GetUserId()
 
 			if err != nil {

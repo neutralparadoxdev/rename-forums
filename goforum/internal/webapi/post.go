@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"log"
 	"strconv"
 	"time"
 
@@ -21,23 +22,18 @@ func MountPost(router fiber.Router, app *core.App) {
 
 		forumName := c.Params("forumName")
 
-		headers := c.GetReqHeaders()
-		jwtString, exists := headers["Bearer-Token"]
+		session, webErr := CheckForSession(c, app.GetSessionManager())
 
-		var session core.Session
-
-		if exists {
-			session = core.NewSession(jwtString)
-			ok, err := app.GetSessionManager().VerifySession(&session)
-
-			if err != nil {
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
 				return c.SendStatus(500)
 			}
+		}
 
-			if !ok {
-				return c.SendStatus(400)
-			}
-
+		if session != nil {
 			userId, err := session.GetUserId()
 
 			if err != nil {
@@ -59,6 +55,9 @@ func MountPost(router fiber.Router, app *core.App) {
 			post, err := app.GetPostManager().GetPost(id, forumName, nil)
 
 			if err != nil {
+				if err.Error() == "user_cant_post" {
+					return c.SendStatus(401)
+				}
 				return c.SendStatus(500)
 			}
 
@@ -85,22 +84,20 @@ func MountPost(router fiber.Router, app *core.App) {
 	})
 
 	group.Post("/", func(c *fiber.Ctx) error {
-		headers := c.GetReqHeaders()
-		jwtString, exists := headers["Bearer-Token"]
 
-		var session core.Session
+		session, webErr := CheckForSession(c, app.GetSessionManager())
 
-		if exists {
-			session = core.NewSession(jwtString)
-			ok, err := app.GetSessionManager().VerifySession(&session)
-
-			if err != nil {
+		if webErr != nil {
+			log.Printf("post_post: %s", webErr)
+			if webErr.Code != WebApiErrorServerError.Code {
+				return c.SendStatus(401)
+			} else {
 				return c.SendStatus(500)
 			}
+		}
 
-			if !ok {
-				return c.SendStatus(400)
-			}
+		if session == nil {
+			return c.SendStatus(401)
 		}
 
 		type NewPostRequest struct {
