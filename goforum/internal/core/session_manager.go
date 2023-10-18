@@ -50,7 +50,7 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 				return Session{}, errors.New("create_session:SignedToken:Wrong key type")
 			}
 
-			session := Session{session: tokenString}
+			session := Session{Session: tokenString}
 
 			man.sessionRepository.Save(session)
 
@@ -70,7 +70,7 @@ var (
 )
 
 func (man *SessionManager) VerifySession(session *Session) (bool, *CoreError) {
-	token, err := jwt.Parse(session.session, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(session.Session, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			log.Printf("unexpected signing method: %v", token.Header["alg"])
@@ -106,7 +106,7 @@ func (man *SessionManager) VerifySession(session *Session) (bool, *CoreError) {
 }
 
 func (man *SessionManager) DeleteSession(session Session) error {
-	token, err := jwt.Parse(session.session, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(session.Session, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			log.Printf("unexpected signing method: %v", token.Header["alg"])

@@ -45,6 +45,7 @@ func MountSession(router fiber.Router, app *core.App) {
 		}
 
 		if session != nil {
+			app.GetSessionManager().DeleteSession(*session)
 			return c.SendStatus(204)
 		} else {
 			return c.SendStatus(401)

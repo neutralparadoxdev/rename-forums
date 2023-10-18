@@ -13,7 +13,7 @@ func New() *MockDatabase {
 
 	user := NewUserRepository()
 	return &MockDatabase{
-		session: &SessionRepository{},
+		session: NewSessionRepository(),
 		user:    user,
 		forum:   NewForumRepository(),
 		post:    NewPostRepository(user),

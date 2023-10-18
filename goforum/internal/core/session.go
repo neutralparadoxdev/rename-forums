@@ -8,18 +8,18 @@ import (
 )
 
 type Session struct {
-	session string /* json webtoken */
+	Session string /* json webtoken */
 	Token   *jwt.Token
 }
 
 func NewSession(token string) Session {
 	return Session{
-		session: token,
+		Session: token,
 	}
 }
 
 func (session *Session) ToString() string {
-	return session.session
+	return session.Session
 }
 
 func (session *Session) GetUserId() (int64, error) {
