@@ -73,7 +73,7 @@ export default function ForumPage() {
 
   const page = (
     <main className="border-box p-2 min-w-full">
-      <h1 className="text-2xl min-w-full border-b-2">{forumData !== null ? forumData.title : "Lorem Ipsum"}</h1>
+      <h1 className="capitalize text-2xl min-w-full border-b-2">{forumData !== null ? forumData.title : "Lorem Ipsum"}</h1>
       <PostList posts={posts !== null ? posts : []} />
     </main>
   )
