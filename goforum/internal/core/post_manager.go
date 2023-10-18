@@ -49,7 +49,7 @@ func (man *PostManager) GetPost(id int64, forumName string, userId *int64) (*Pos
 	}
 
 	if !forum.CanViewPosts(userId) {
-		return nil, errors.New("get_post: User does not have permission to post")
+		return nil, errors.New("user_cant_post")
 	}
 
 	repoPost := man.db.GetPostRepository()

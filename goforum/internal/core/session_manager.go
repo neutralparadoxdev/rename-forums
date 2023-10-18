@@ -62,37 +62,46 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 	return Session{}, nil
 }
 
-func (man *SessionManager) VerifySession(session *Session) (bool, error) {
+var (
+	CoreErrorSessionManagerUnexpectedSigningMethod    = NewCoreError(300, "verify_session:jwt unexpected signing error")
+	CoreErrorSessionManagerParsingFailed              = NewCoreError(301, "verify_session:jwt parsing failed")
+	CoreErrorSessionManagerInvalidToken               = NewCoreError(302, "verify_session:invalid token")
+	CoreErrorSessionManagerErrorWhileCheckingPresence = NewCoreError(303, "verify_session:error while checking presence")
+)
+
+func (man *SessionManager) VerifySession(session *Session) (bool, *CoreError) {
 	token, err := jwt.Parse(session.session, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			log.Printf("unexpected signing method: %v", token.Header["alg"])
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			err := NewCoreErrorFrom(CoreErrorSessionManagerUnexpectedSigningMethod, fmt.Sprintf("%v", token.Header["alg"]))
+			return nil, &err
 		}
 
 		return []byte(man.secret), nil
 	})
 
 	if err != nil {
-		log.Printf("DeleteSession Error: %v", err)
-		return false, err
+		log.Printf("verify_session: errored")
+		return false, &CoreErrorSessionManagerParsingFailed
 	}
 
 	if !token.Valid {
-		return false, errors.New("not a valid token. potentially an attacker")
+		log.Printf("verify_session: invalidToken")
+		return false, &CoreErrorSessionManagerInvalidToken
 	}
 
 	isPresent, err := man.sessionRepository.DoesSessionExist(*session)
 
 	if err != nil {
-		return false, err
+		return false, &CoreErrorSessionManagerErrorWhileCheckingPresence
 	}
 
-	if !isPresent {
-		return false, nil
-	} else {
+	if isPresent {
 		session.Token = token
 		return true, nil
+	} else {
+		return false, nil
 	}
 }
 

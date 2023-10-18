@@ -2,6 +2,7 @@ package webapi
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,26 +13,24 @@ func MountGroup(router fiber.Router, app *core.App) {
 	group := router.Group("/api/group")
 
 	group.Get("/", func(c *fiber.Ctx) error {
-		headers := c.GetReqHeaders()
-		jwtString, exists := headers["Bearer-Token"]
 
-		var session core.Session
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(401)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
 
 		var userId int64
 
 		valid := false
 
-		if exists {
-			session = core.NewSession(jwtString)
-			ok, err := app.GetSessionManager().VerifySession(&session)
-
-			if err != nil {
-				return c.SendStatus(500)
-			}
-
-			if !ok {
-				return c.SendStatus(400)
-			}
+		if session != nil {
+			var err error
 
 			userId, err = session.GetUserId()
 
