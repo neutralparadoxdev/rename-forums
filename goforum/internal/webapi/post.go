@@ -2,6 +2,7 @@ package webapi
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
@@ -65,7 +66,21 @@ func MountPost(router fiber.Router, app *core.App) {
 				return c.SendStatus(404)
 			}
 
-			return c.JSON(post)
+			type PostDTO struct {
+				Title      string    `json:"title"`
+				Body       string    `json:"body"`
+				AuthorName string    `json:"authorName"`
+				CreatedAt  time.Time `json:"createdAt"`
+			}
+
+			postdto := PostDTO{
+				Title:      post.Title,
+				Body:       post.Body,
+				AuthorName: post.AuthorName,
+				CreatedAt:  post.CreatedAt,
+			}
+
+			return c.JSON(postdto)
 		}
 	})
 
