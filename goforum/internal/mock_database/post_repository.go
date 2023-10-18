@@ -22,9 +22,20 @@ func NewPostRepository(users *UserRepository) *PostRepository {
 		ForumPostedName: "math",
 		OwnerId:         12,
 		AuthorName:      "hello",
+		CreatedAt:       time.Now().Add(-1 * time.Minute),
 	}
 
-	posts[1] = core.Post{
+	posts[10] = core.Post{
+		Title:           "Math second post",
+		Body:            "This is the body for the post",
+		Id:              10,
+		ForumPostedName: "math",
+		OwnerId:         12,
+		AuthorName:      "hello",
+		CreatedAt:       time.Now().Add(-2 * time.Minute),
+	}
+
+	posts[5] = core.Post{
 		Title:           "Private Math first post",
 		Body:            "This is the body for the post for privat emath",
 		Id:              5,
