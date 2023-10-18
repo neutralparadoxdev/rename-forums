@@ -1,6 +1,9 @@
 package core
 
-import "errors"
+import (
+	"errors"
+	"sort"
+)
 
 type PostManager struct {
 	db Database
@@ -20,6 +23,10 @@ func (man *PostManager) GetPosts(forumName string) ([]Post, error) {
 	if err != nil {
 		return make([]Post, 0), err
 	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].CreatedAt.Before(posts[j].CreatedAt)
+	})
 
 	return posts, nil
 }
