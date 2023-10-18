@@ -66,3 +66,49 @@ func (man *PostManager) GetPost(id int64, forumName string, userId *int64) (*Pos
 
 	return post, nil
 }
+
+func (man *PostManager) GetAllPosts(userId *int64) ([]Post, error) {
+	if userId != nil {
+		forums, err := man.db.GetForumRepository().GetAll(userId)
+
+		if err != nil {
+			return make([]Post, 0), err
+		}
+
+		out := make([]Post, 0)
+
+		for _, v := range forums {
+			posts, err := man.db.GetPostRepository().GetPostsOnForum(v.Title)
+			if err != nil {
+				return make([]Post, 0), err
+			}
+
+			for _, i := range posts {
+				i.ForumPostedName = v.Title
+				out = append(out, i)
+			}
+		}
+		return out, nil
+	} else {
+		forums, err := man.db.GetForumRepository().GetAll(userId)
+
+		if err != nil {
+			return make([]Post, 0), err
+		}
+
+		out := make([]Post, 0)
+
+		for _, v := range forums {
+			posts, err := man.db.GetPostRepository().GetPostsOnForum(v.Title)
+			if err != nil {
+				return make([]Post, 0), err
+			}
+
+			for _, i := range posts {
+				out = append(out, i)
+			}
+		}
+		return out, nil
+
+	}
+}
