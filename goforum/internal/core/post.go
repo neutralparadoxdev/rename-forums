@@ -11,4 +11,6 @@ type Post struct {
 	CreatedAt       time.Time
 	LastEdited      time.Time
 	AuthorName      string
+	UpVote          int64
+	DownVote        int64
 }
