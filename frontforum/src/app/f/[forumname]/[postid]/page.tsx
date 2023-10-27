@@ -54,7 +54,7 @@ const PostPage: FC<PostPageProps> = () => {
                 <div className="mt-4 border-2 p-4">
                     <form className="min-w-full">
                         <label className="block" htmlFor="comment-field" >Please Leave a comment</label>
-                        <input id="comment-field" className="border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
+                        <input id="comment-field" className="border-yellow-500 border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
                     </form>
                     <h4>Comments Go Here</h4>
                 </div>
