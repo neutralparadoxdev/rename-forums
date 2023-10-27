@@ -2,6 +2,7 @@
 
 import { ErrorComponent } from "@/app/features/error/Error";
 import { LoadingComponent } from "@/app/features/loading/Loading";
+import { SignUpLoginModal, SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLoginModal";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
@@ -27,6 +28,7 @@ const PostPage: FC<PostPageProps> = () => {
     const [post, setPost] = useState<PostResponse | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [loginSignupPrompt, setLoginSignupPrompt] = useState<SignUpLoginModalPurpose | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -45,11 +47,18 @@ const PostPage: FC<PostPageProps> = () => {
 
     const page = post !== null ? (
         <>
+            { loginSignupPrompt != null ? 
+                <SignUpLoginModal 
+                    purpose={loginSignupPrompt} 
+                    close={() => {setLoginSignupPrompt(null);}} 
+                    changePurpose={(purpose) => setLoginSignupPrompt(purpose)}
+                    /> : 
+                    <></> }
             <header className="border-b-4 border-[blue]  flex justify-between pr-2 pl-2">
                 <h1 className="capitalize text-3xl font-bold">{forumName}</h1>
                 <div className="mt-auto mb-0">
-                    <a className="mr-2 hover:text-red-400" href="">Sign In</a>
-                    <a className="hover:text-red-400" href="">Log In</a>
+                    <button className="mr-2 hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.SignUp)}>Sign Up</button>
+                    <button className="hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.Login)}>Log In</button>
                 </div>
             </header>
             <main className="m-2">
@@ -58,7 +67,7 @@ const PostPage: FC<PostPageProps> = () => {
                 <p className="border-2 p-4">{post.body}</p>
                 <div className="mt-4 border-2 p-4">
                     <form className="min-w-full">
-                        <label htmlFor="comment-field" >Please Leave a comment</label>
+                        <label className="block" htmlFor="comment-field" >Please Leave a comment</label>
                         <input id="comment-field" className="border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
                     </form>
                     <h4>Comments Go Here</h4>
