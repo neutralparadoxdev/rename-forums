@@ -44,12 +44,27 @@ const PostPage: FC<PostPageProps> = () => {
     }, [])
 
     const page = post !== null ? (
-         <main>
-            <h1>Post</h1>
-            <h2>{post.title}</h2>
-            <h3>By {post.authorName}</h3>
-            <p>{post.body}</p>
-        </main>
+        <>
+            <header className="border-b-4 border-[blue]  flex justify-between pr-2 pl-2">
+                <h1 className="capitalize text-3xl font-bold">{forumName}</h1>
+                <div className="mt-auto mb-0">
+                    <a className="mr-2 hover:text-red-400" href="">Sign In</a>
+                    <a className="hover:text-red-400" href="">Log In</a>
+                </div>
+            </header>
+            <main className="m-2">
+                <h2 className="text-2xl font-bold">{post.title}</h2>
+                <h3 className="text-blue-400">By <a className="hover:text-red-400" href="/">{post.authorName}</a></h3>
+                <p className="border-2 p-4">{post.body}</p>
+                <div className="mt-4 border-2 p-4">
+                    <form className="min-w-full">
+                        <label htmlFor="comment-field" >Please Leave a comment</label>
+                        <input id="comment-field" className="border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
+                    </form>
+                    <h4>Comments Go Here</h4>
+                </div>
+            </main>
+        </>
     ) : <></>;
     return (isLoading ? <LoadingComponent /> :
         (error !== null ? <ErrorComponent msg={error} /> : page));
