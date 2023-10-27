@@ -2,10 +2,10 @@ import { FC } from "react";
 
 export type SignUpComponentProps = {
     swap: () => void,
-    close: () => void
+    close: () => void,
 }
 
-export const SignUpComponent: FC<SignUpComponentProps> = ({close} : SignUpComponentProps) => {
+export const SignUpComponent: FC<SignUpComponentProps> = ({close, swap} : SignUpComponentProps) => {
     return (
     <div className="ml-auto mr-auto w-96 bg-sky-500 p-5 mt-44">
         <button className="bg-white rounded-full" onClick={close}>X</button>
@@ -23,7 +23,7 @@ export const SignUpComponent: FC<SignUpComponentProps> = ({close} : SignUpCompon
             <input id="eula" type="checkbox" required/>
             <input className="p-2 bg-white block" type="submit" />
         </form>
-        <p className="ml-auto mr-auto w-fit">Already have an account? <button className="p-2 bg-white">Login</button></p>
+        <p className="ml-auto mr-auto w-fit">Already have an account? <button onClick={swap} className="p-2 bg-white">Login</button></p>
     </div>);
 
 }
