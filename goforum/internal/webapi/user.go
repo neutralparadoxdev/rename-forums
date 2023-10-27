@@ -1,6 +1,8 @@
 package webapi
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
 )
@@ -19,6 +21,7 @@ func MountUser(router fiber.Router, app *core.App) {
 		req := new(NewUser)
 
 		if err := c.BodyParser(req); err != nil {
+			log.Print(err)
 			return c.SendStatus(400)
 		}
 
@@ -27,6 +30,7 @@ func MountUser(router fiber.Router, app *core.App) {
 		user, err := userManager.CreateUser(req.Username, req.Email, req.Password, req.Eula)
 
 		if err != nil {
+			log.Print(err)
 			return c.SendStatus(400)
 		}
 

@@ -34,8 +34,8 @@ func (man *UserManager) CreateUser(username string, email string, password strin
 		return nil, errors.New("create_user: user exists")
 	}
 
-	hashedEmail, err := man.auth.Generate(email)
-	if err != nil {
+	hashedEmail, coreErr := man.auth.Generate(email)
+	if coreErr != nil {
 		return nil, errors.New("create_user: could not hash email")
 	}
 
@@ -48,8 +48,8 @@ func (man *UserManager) CreateUser(username string, email string, password strin
 		return nil, errors.New("create_user: pre-existing email found")
 	}
 
-	hashedPassword, err := man.auth.Generate(password)
-	if err != nil {
+	hashedPassword, coreErr := man.auth.Generate(password)
+	if coreErr != nil {
 		return nil, errors.New("create_user: could not hash password")
 	}
 
