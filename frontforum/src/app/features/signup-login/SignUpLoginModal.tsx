@@ -10,16 +10,17 @@ export enum SignUpLoginModalPurpose {
 export type SignUpLoginModal = {
     purpose: SignUpLoginModalPurpose,
     changePurpose: (purpose: SignUpLoginModalPurpose) => void,
-    close: () => void
+    close: () => void,
+    setAuthToken: (token: string) => void,
 }
 
 
-export const SignUpLoginModal: FC<SignUpLoginModal> = ({purpose, close, changePurpose} : SignUpLoginModal) => {
+export const SignUpLoginModal: FC<SignUpLoginModal> = ({purpose, close, changePurpose, setAuthToken} : SignUpLoginModal) => {
 
     let internal;
     switch(purpose) {
         case SignUpLoginModalPurpose.Login:
-            internal = <LoginComponent close={close} swap={() => changePurpose(SignUpLoginModalPurpose.SignUp)}/>
+            internal = <LoginComponent close={close} setAuthToken={setAuthToken} swap={() => changePurpose(SignUpLoginModalPurpose.SignUp)}/>
             break;
         case SignUpLoginModalPurpose.SignUp:
             internal = <SignUpComponent close={close} swap={() => changePurpose(SignUpLoginModalPurpose.Login)} />
