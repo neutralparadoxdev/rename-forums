@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { LoadingComponent } from '@/app/features/loading/Loading';
 import { PostStubProps } from '@/app/features/PostList/PostStub';
 import { ErrorComponent } from '../../features/error/Error';
+import { Header } from '@/app/features/header/header';
 
 /*
 		type PostDTO struct {
@@ -56,7 +57,7 @@ export default function ForumPage() {
       return data.json()
     })
     .then((data : any) => {
-      setPosts(data.posts.map((post: PostData) => {post.subforum = pathname; return post}));
+      setPosts(data.posts.map((post: PostData) => {post.subforum = pathParam; return post}));
       setForumData({
         title: data.title,
         description: data.description,
@@ -72,10 +73,12 @@ export default function ForumPage() {
   })
 
   const page = (
+    <>
+    <Header title={forumData !== null ? forumData.title : "Lorem Ipsum"} link={null}/>
     <main className="border-box p-2 min-w-full">
-      <h1 className="capitalize text-2xl min-w-full border-b-2">{forumData !== null ? forumData.title : "Lorem Ipsum"}</h1>
       <PostList posts={posts !== null ? posts : []} />
     </main>
+    </>
   )
 
   return (isLoading ? <LoadingComponent /> : (error !== null || true ? page : <ErrorComponent msg={error !== null ? "Some Error" : ""} />));

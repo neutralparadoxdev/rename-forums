@@ -57,7 +57,7 @@ func MountGroup(router fiber.Router, app *core.App) {
 
 		type PostDTO struct {
 			Title      string    `json:"title"`
-			Forum      string    `json:"forum"`
+			Forum      string    `json:"subforum"`
 			AuthorName string    `json:"authorName"`
 			CreatedAt  time.Time `json:"createdAt"`
 			Id         string    `json:"id"`

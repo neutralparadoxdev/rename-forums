@@ -4,6 +4,7 @@ import { PostStubProps } from "./features/PostList/PostStub";
 import { PostList } from "./features/PostList/PostList";
 import { LoadingComponent } from "./features/loading/Loading";
 import { ErrorComponent } from "./features/error/Error";
+import { Header } from "./features/header/header";
 
 type HomePageProps = {}
 
@@ -27,10 +28,12 @@ const HomePage: FC<HomePageProps> = () => {
     }, [])
 
     const page = (
+        <>
+        <Header title="Home" link={null}/>
          <main>
-            <h1 className="text-4xl">Home</h1>
             <PostList posts={postList} />
         </main>
+        </>
     )
     return isLoading ? <LoadingComponent />  :
         (error != null ? <ErrorComponent msg={error} /> : page);

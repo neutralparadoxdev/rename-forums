@@ -1,8 +1,8 @@
 'use client';
 
 import { ErrorComponent } from "@/app/features/error/Error";
+import { Header } from "@/app/features/header/header";
 import { LoadingComponent } from "@/app/features/loading/Loading";
-import { SignUpLoginModal, SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLoginModal";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
@@ -28,7 +28,6 @@ const PostPage: FC<PostPageProps> = () => {
     const [post, setPost] = useState<PostResponse | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [loginSignupPrompt, setLoginSignupPrompt] = useState<SignUpLoginModalPurpose | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -47,20 +46,7 @@ const PostPage: FC<PostPageProps> = () => {
 
     const page = post !== null ? (
         <>
-            { loginSignupPrompt != null ? 
-                <SignUpLoginModal 
-                    purpose={loginSignupPrompt} 
-                    close={() => {setLoginSignupPrompt(null);}} 
-                    changePurpose={(purpose) => setLoginSignupPrompt(purpose)}
-                    /> : 
-                    <></> }
-            <header className="border-b-4 border-[blue]  flex justify-between pr-2 pl-2">
-                <h1 className="capitalize text-3xl font-bold">{forumName}</h1>
-                <div className="mt-auto mb-0">
-                    <button className="mr-2 hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.SignUp)}>Sign Up</button>
-                    <button className="hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.Login)}>Log In</button>
-                </div>
-            </header>
+            <Header title={forumName} link={"/f/" + forumName}/>
             <main className="m-2">
                 <h2 className="text-2xl font-bold">{post.title}</h2>
                 <h3 className="text-blue-400">By <a className="hover:text-red-400" href="/">{post.authorName}</a></h3>

@@ -2,6 +2,7 @@
 import { FC, useState, useEffect } from 'react';
 import { LoadingComponent } from '../features/loading/Loading';
 import { ErrorComponent } from '../features/error/Error';
+import { Header } from '../features/header/header';
 
 type ForumStubProps = {
     title: string,
@@ -40,12 +41,14 @@ const ForumsPage: FC<ForumsPageProps> = () => {
     }, [])
 
     const page = (
+        <>
+        <Header title="Forums List" link={null} />
         <main className="p-2 min-w-full">
-            <h1 className="text-4xl">Forums</h1>
             <ol>
                 { forumList.map(x => <ForumStub {...x}/>) }
             </ol>
         </main>
+        </>
     );
 
     return (
