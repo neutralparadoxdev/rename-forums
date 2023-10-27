@@ -45,6 +45,24 @@ Description: Get Post with Id
 
 Work: Status Done.
 
+#### ✅ \[POST\] /api/post/:forumName/:id/upvote \[AUTH REQUIRED\]
+
+Description: Adds upvote. changes vote if already present
+
+Work: Status Done
+
+#### ✅ \[POST\] /api/post/:forumName/:id/downvote \[AUTH REQUIRED\]
+
+Description: Adds down vote. changes vote if already present.
+
+Work: Status Done
+
+#### ✅ \[DELETE\] /api/post/:forumName/:id/deletevote \[AUTH REQUIRED\]
+
+Description: removes vote if present. otherwise, silently fails
+
+Work: Status Done
+
 ### Forum
 
 #### ✅ \[POST\] /api/forum \[AUTH Required\]
