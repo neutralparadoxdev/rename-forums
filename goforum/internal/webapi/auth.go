@@ -33,11 +33,14 @@ func TokenToSession(token string, sessionManager *core.SessionManager) (*core.Se
 		if err.Code == core.CoreErrorAuthenticatorFailedToVerify.Code ||
 			err.Code == core.CoreErrorSessionManagerUnexpectedSigningMethod.Code ||
 			err.Code == core.CoreErrorSessionManagerParsingFailed.Code ||
-			err.Code == core.CoreErrorSessionManagerInvalidToken.Code {
+			err.Code == core.CoreErrorSessionManagerInvalidToken.Code ||
+			err.Code == core.CoreErrorSessionManagerErrorWhileCheckingPresence.Code {
 			log.Printf("check_session: %s", err)
 			return nil, &WebApiErrorTokenValidationFailed
 
 		} else {
+			log.Printf("check_session: %s", err)
+
 			return nil, &WebApiErrorServerError
 		}
 	}

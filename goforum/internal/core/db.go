@@ -45,4 +45,6 @@ type VoteRepository interface {
 	/// returns the original vote. 0 means not voted
 	ChangeVote(postId int64, userId int64, vote int64) (int64, error)
 	Vote(postId int64, userId int64, direction int64) (int64, error)
+
+	GetVotesForPosts(userId int64, postIds []int64) ([]int64, error)
 }

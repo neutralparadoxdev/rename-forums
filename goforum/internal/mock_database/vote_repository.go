@@ -15,7 +15,9 @@ type VoteRepository struct {
 }
 
 func NewVoteRepository() *VoteRepository {
-	return &VoteRepository{}
+	return &VoteRepository{
+		votes: make(map[userId]map[postId]core.Vote),
+	}
 }
 
 func (repo *VoteRepository) HasVotedOn(postId int64, userId int64) (bool, error) {
@@ -49,13 +51,35 @@ func (repo *VoteRepository) ChangeVote(postId int64, userId int64, vote int64) (
 			}
 
 			return oldVote.Direction, nil
-		} else {
-			return 0, errors.New("not_found")
 		}
-	} else {
-		return 0, errors.New("not_found")
+
+		if vote == 0 {
+			return 0, nil
+		}
+
+		myVote := core.Vote{
+			UserId:    userId,
+			PostId:    postId,
+			Direction: vote,
+		}
+		posts[postId] = myVote
+		repo.votes[userId] = posts
 	}
 
+	repo.votes[userId] = make(map[int64]core.Vote)
+
+	myVote := core.Vote{
+		UserId:    userId,
+		PostId:    postId,
+		Direction: vote,
+	}
+
+	posts = repo.votes[userId]
+
+	posts[postId] = myVote
+	repo.votes[userId] = posts
+
+	return 0, nil
 }
 
 func (repo *VoteRepository) Vote(postId int64, userId int64, direction int64) (int64, error) {
@@ -78,4 +102,20 @@ func (repo *VoteRepository) Vote(postId int64, userId int64, direction int64) (i
 	} else {
 		return 0, errors.New("not_found")
 	}
+}
+
+func (repo *VoteRepository) GetVotesForPosts(userId int64, postIds []int64) ([]int64, error) {
+	posts, exists := repo.votes[userId]
+
+	out := make([]int64, len(postIds))
+
+	if exists {
+		for pos, id := range postIds {
+			vote, exists := posts[id]
+			if exists {
+				out[pos] = vote.Direction
+			}
+		}
+	}
+	return out, nil
 }

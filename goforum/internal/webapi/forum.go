@@ -52,6 +52,21 @@ func MountForum(router fiber.Router, app *core.App) {
 	})
 
 	group.Get("/:forumName", func(c *fiber.Ctx) error {
+		session, webApiErr := CheckForSession(c, app.GetSessionManager())
+
+		if webApiErr != nil {
+			log.Printf("Error Code: %d", webApiErr.Code)
+			if webApiErr.Code == WebApiErrorTokenValidationFailed.Code {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				if webApiErr.Code == WebApiErrorTokenInvalid.Code {
+					return c.SendStatus(fiber.StatusUnauthorized)
+				}
+				return c.SendStatus(fiber.StatusInternalServerError)
+			}
+
+		}
+
 		forumName := c.Params("forumName")
 
 		forum, err := app.GetForumManager().GetForum(forumName)
@@ -65,6 +80,19 @@ func MountForum(router fiber.Router, app *core.App) {
 			return c.SendStatus(404)
 		}
 
+		if session != nil {
+
+			userId, err := session.GetUserId()
+
+			if err != nil {
+				return c.SendStatus(fiber.StatusBadRequest)
+			}
+
+			if !(forum.IsPublic || containsI64(&forum.OwnerListIds, userId) || containsI64(&forum.UserJoinListIds, userId)) {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			}
+		}
+
 		posts, err := app.GetPostManager().GetPosts(forumName)
 
 		if err != nil {
@@ -76,6 +104,7 @@ func MountForum(router fiber.Router, app *core.App) {
 			AuthorName string    `json:"authorName"`
 			CreatedAt  time.Time `json:"createdAt"`
 			Id         string    `json:"id"`
+			Voted      string    `json:"Voted"`
 		}
 
 		type CompleteForumDTO struct {
@@ -84,13 +113,42 @@ func MountForum(router fiber.Router, app *core.App) {
 			Posts       []PostDTO `json:"posts"`
 		}
 
+		var votes []int64
+
+		if session != nil {
+
+			postIds := make([]int64, len(posts))
+			for pos, post := range posts {
+				postIds[pos] = post.Id
+			}
+
+			userId, err := session.GetUserId()
+
+			if err != nil {
+				return c.SendStatus(fiber.StatusBadRequest)
+			}
+
+			votes, err = app.GetVoteManager().GetVotesForPosts(userId, postIds)
+			if err != nil {
+				return c.SendStatus(500)
+			}
+		}
+
+		if len(votes) != len(posts) {
+			votes = make([]int64, len(posts))
+			for pos, _ := range votes {
+				votes[pos] = -100
+			}
+		}
+
 		postsdto := make([]PostDTO, 0)
-		for _, v := range posts {
+		for pos, v := range posts {
 			postsdto = append(postsdto, PostDTO{
 				Title:      v.Title,
 				AuthorName: v.AuthorName,
 				CreatedAt:  v.CreatedAt,
 				Id:         fmt.Sprintf("%d", v.Id),
+				Voted:      fmt.Sprintf("%d", votes[pos]),
 			})
 		}
 
