@@ -2,6 +2,7 @@
 
 import { ErrorComponent } from "@/app/features/error/Error";
 import { LoadingComponent } from "@/app/features/loading/Loading";
+import { SignUpLoginModal, SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLoginModal";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
@@ -27,6 +28,7 @@ const PostPage: FC<PostPageProps> = () => {
     const [post, setPost] = useState<PostResponse | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [loginSignupPrompt, setLoginSignupPrompt] = useState<SignUpLoginModalPurpose | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -44,12 +46,34 @@ const PostPage: FC<PostPageProps> = () => {
     }, [])
 
     const page = post !== null ? (
-         <main>
-            <h1>Post</h1>
-            <h2>{post.title}</h2>
-            <h3>By {post.authorName}</h3>
-            <p>{post.body}</p>
-        </main>
+        <>
+            { loginSignupPrompt != null ? 
+                <SignUpLoginModal 
+                    purpose={loginSignupPrompt} 
+                    close={() => {setLoginSignupPrompt(null);}} 
+                    changePurpose={(purpose) => setLoginSignupPrompt(purpose)}
+                    /> : 
+                    <></> }
+            <header className="border-b-4 border-[blue]  flex justify-between pr-2 pl-2">
+                <h1 className="capitalize text-3xl font-bold">{forumName}</h1>
+                <div className="mt-auto mb-0">
+                    <button className="mr-2 hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.SignUp)}>Sign Up</button>
+                    <button className="hover:text-red-400" onClick={() => setLoginSignupPrompt(SignUpLoginModalPurpose.Login)}>Log In</button>
+                </div>
+            </header>
+            <main className="m-2">
+                <h2 className="text-2xl font-bold">{post.title}</h2>
+                <h3 className="text-blue-400">By <a className="hover:text-red-400" href="/">{post.authorName}</a></h3>
+                <p className="border-2 p-4">{post.body}</p>
+                <div className="mt-4 border-2 p-4">
+                    <form className="min-w-full">
+                        <label className="block" htmlFor="comment-field" >Please Leave a comment</label>
+                        <input id="comment-field" className="border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
+                    </form>
+                    <h4>Comments Go Here</h4>
+                </div>
+            </main>
+        </>
     ) : <></>;
     return (isLoading ? <LoadingComponent /> :
         (error !== null ? <ErrorComponent msg={error} /> : page));
