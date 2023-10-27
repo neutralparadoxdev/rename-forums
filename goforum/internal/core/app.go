@@ -16,6 +16,7 @@ type App struct {
 	Database       Database
 	ForumManager   *ForumManager
 	PostManager    *PostManager
+	VoteManager    *VoteManager
 }
 
 func (app *App) Init(config AppConfig) error {
@@ -31,6 +32,7 @@ func (app *App) Init(config AppConfig) error {
 	app.sessionManager = NewSessionManager(config.TokenSecret, app.UserManager, app.Authenticator, app.Database.GetSessionRepository())
 	app.ForumManager = NewForumManager(app.Database)
 	app.PostManager = NewPostManager(app.Database)
+	app.VoteManager = NewVoteManager(app.Database)
 
 	return nil
 }
@@ -55,4 +57,8 @@ func (app *App) GetForumManager() *ForumManager {
 
 func (app *App) GetPostManager() *PostManager {
 	return app.PostManager
+}
+
+func (app *App) GetVoteManager() *VoteManager {
+	return app.VoteManager
 }

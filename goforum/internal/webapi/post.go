@@ -12,6 +12,102 @@ import (
 func MountPost(router fiber.Router, app *core.App) {
 	group := router.Group("/api/post/")
 
+	group.Post("/:forumName/:id/upvote", func(c *fiber.Ctx) error {
+		stringId := c.Params("id")
+
+		id, err := strconv.ParseInt(stringId, 10, 64)
+		if err != nil {
+			return c.SendStatus(404)
+		}
+
+		//forumName := c.Params("forumName")
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		userId, err := session.GetUserId()
+
+		if err != nil {
+			return c.SendStatus(fiber.StatusUnauthorized)
+		}
+
+		app.GetVoteManager().ChangeVote(userId, id, 1)
+
+		return c.SendStatus(202)
+	})
+
+	group.Post("/:forumName/:id/downvote", func(c *fiber.Ctx) error {
+		stringId := c.Params("id")
+
+		id, err := strconv.ParseInt(stringId, 10, 64)
+		if err != nil {
+			return c.SendStatus(404)
+		}
+
+		//forumName := c.Params("forumName")
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		userId, err := session.GetUserId()
+
+		if err != nil {
+			return c.SendStatus(fiber.StatusUnauthorized)
+		}
+
+		app.GetVoteManager().ChangeVote(userId, id, -1)
+
+		return c.SendStatus(202)
+	})
+
+	group.Delete("/:forumName/:id/deletevote", func(c *fiber.Ctx) error {
+		stringId := c.Params("id")
+
+		id, err := strconv.ParseInt(stringId, 10, 64)
+		if err != nil {
+			return c.SendStatus(404)
+		}
+
+		//forumName := c.Params("forumName")
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		userId, err := session.GetUserId()
+
+		if err != nil {
+			return c.SendStatus(fiber.StatusUnauthorized)
+		}
+
+		app.GetVoteManager().ChangeVote(userId, id, 0)
+
+		return c.SendStatus(202)
+	})
+
 	group.Get("/:forumName/:id", func(c *fiber.Ctx) error {
 		stringId := c.Params("id")
 

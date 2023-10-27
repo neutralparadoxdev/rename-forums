@@ -1,6 +1,7 @@
 package mockdatabase
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 
@@ -89,4 +90,39 @@ func (repo *PostRepository) GetPost(postId int64) (*core.Post, error) {
 		}
 	}
 	return nil, nil
+}
+
+func (repo *PostRepository) AddVote(postId int64, vote int64) error {
+	post, exists := repo.posts[postId]
+	if exists {
+		if vote == -1 {
+			post.DownVote += 1
+		}
+
+		if vote == 1 {
+			post.UpVote += 1
+		}
+
+		return nil
+	} else {
+		return errors.New("not_found")
+	}
+}
+
+func (repo *PostRepository) RemoveVote(postId int64, vote int64) error {
+	post, exists := repo.posts[postId]
+	if exists {
+		if vote == -1 {
+			post.DownVote -= 1
+		}
+
+		if vote == 1 {
+			post.UpVote -= 1
+		}
+
+		return nil
+	} else {
+		return errors.New("not_found")
+	}
+
 }

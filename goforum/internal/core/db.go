@@ -5,6 +5,7 @@ type Database interface {
 	GetUserRepository() UserRepository
 	GetForumRepository() ForumRepository
 	GetPostRepository() PostRepository
+	GetVoteRepository() VoteRepository
 	Init() error
 }
 
@@ -34,4 +35,16 @@ type PostRepository interface {
 	GetPostsOnForum(forumName string) ([]Post, error)
 	Create(title string, body string, forumName string, userId int64) (bool, error)
 	GetPost(userId int64) (*Post, error)
+
+	AddVote(postId int64, vote int64) error
+	RemoveVote(postId int64, vote int64) error
+}
+
+type VoteRepository interface {
+	HasVotedOn(postId int64, userId int64) (bool, error)
+	/// returns the original vote. 0 means not voted
+	ChangeVote(postId int64, userId int64, vote int64) (int64, error)
+	Vote(postId int64, userId int64, direction int64) (int64, error)
+
+	GetVotesForPosts(userId int64, postIds []int64) ([]int64, error)
 }
