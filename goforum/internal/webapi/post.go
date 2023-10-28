@@ -1,6 +1,7 @@
 package webapi
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -208,22 +209,29 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(400)
 		}
 
+		if len(req.Title) == 0 || len(req.Body) == 0 || len(req.ForumName) == 0 {
+			return c.SendStatus(400)
+		}
+
 		userId, err := session.GetUserId()
 
 		if err != nil {
 			return c.SendStatus(500)
 		}
 
-		ok, err := app.GetPostManager().CreatePost(req.Title, req.Body, req.ForumName, userId)
+		postId, err := app.GetPostManager().CreatePost(req.Title, req.Body, req.ForumName, userId)
 
 		if err != nil {
 			return c.SendStatus(500)
 		}
-
-		if ok {
-			return c.SendStatus(201)
-		} else {
-			return c.SendStatus(500)
+		type PostIdReponse struct {
+			Id string `json:"id" form:"id"`
 		}
+
+		response := PostIdReponse{
+			Id: fmt.Sprintf("%d", postId),
+		}
+
+		return c.JSON(response)
 	})
 }

@@ -63,13 +63,13 @@ func (repo *PostRepository) GetPostsOnForum(forumName string) ([]core.Post, erro
 	return out, nil
 }
 
-func (repo *PostRepository) Create(title string, body string, forumName string, userId int64) (bool, error) {
+func (repo *PostRepository) Create(title string, body string, forumName string, userId int64) (int64, error) {
 	id := rand.Int63()
 
 	user, err := repo.users.GetById(userId)
 
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 
 	repo.posts[id] = core.Post{
@@ -79,8 +79,9 @@ func (repo *PostRepository) Create(title string, body string, forumName string, 
 		CreatedAt:       time.Now(),
 		OwnerId:         userId,
 		AuthorName:      user.Username,
+		Id:              id,
 	}
-	return true, nil
+	return id, nil
 }
 
 func (repo *PostRepository) GetPost(postId int64) (*core.Post, error) {
