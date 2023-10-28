@@ -3,6 +3,7 @@
 import { ErrorComponent } from "@/app/features/error/Error";
 import { Header } from "@/app/features/header/header";
 import { LoadingComponent } from "@/app/features/loading/Loading";
+import { SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLoginModal";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
@@ -28,6 +29,7 @@ const PostPage: FC<PostPageProps> = () => {
     const [post, setPost] = useState<PostResponse | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [loginSignUpState, setLoginSignUpState] = useState<SignUpLoginModalPurpose | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -46,7 +48,7 @@ const PostPage: FC<PostPageProps> = () => {
 
     const page = post !== null ? (
         <>
-            <Header title={forumName} link={"/f/" + forumName}/>
+            <Header title={forumName} link={"/f/" + forumName} loginSignUpState={loginSignUpState} setLoginSignUpState={(x) => { setLoginSignUpState(x); }}/>
             <main className="m-2">
                 <h2 className="text-2xl font-bold">{post.title}</h2>
                 <h3 className="text-blue-400">By <a className="hover:text-red-400" href="/">{post.authorName}</a></h3>

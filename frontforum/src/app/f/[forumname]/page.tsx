@@ -7,6 +7,9 @@ import { PostStubProps } from '@/app/features/PostList/PostStub';
 import { ErrorComponent } from '../../features/error/Error';
 import { Header } from '@/app/features/header/header';
 
+import { NewPost } from '../../features/NewPost/NewPost';
+import { SignUpLoginModalPurpose } from '@/app/features/signup-login/SignUpLoginModal';
+
 /*
 		type PostDTO struct {
 			Title      string    `json:"title"`
@@ -21,6 +24,8 @@ import { Header } from '@/app/features/header/header';
 			Posts       []PostDTO `json:"posts"`
 		}
 */
+
+
 
 type PostData = {
   title: string,
@@ -51,6 +56,9 @@ export default function ForumPage() {
   const [posts, setPosts] = useState<PostData[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [loginSignUpState, setLoginSignUpState] = useState<SignUpLoginModalPurpose | null>(null);
+
+
   useEffect(() => {
     fetch("/api/forum/" + pathParam)
     .then(data => {
@@ -74,8 +82,17 @@ export default function ForumPage() {
 
   const page = (
     <>
-    <Header title={forumData !== null ? forumData.title : "Lorem Ipsum"} link={null}/>
+    <Header 
+      title={forumData !== null ? forumData.title : "Lorem Ipsum"} 
+      link={null} 
+      setLoginSignUpState={x => { setLoginSignUpState(x);}}
+      loginSignUpState={loginSignUpState}
+      />
     <main className="border-box p-2 min-w-full">
+      <NewPost 
+        rows={8} 
+        forums={[forumData !== null ? forumData.title : "lorem"]}
+        showLogin={() => setLoginSignUpState(SignUpLoginModalPurpose.Login)}/>
       <PostList posts={posts !== null ? posts : []} />
     </main>
     </>
