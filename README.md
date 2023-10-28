@@ -37,7 +37,11 @@ The REST api will provide access to all information stored in storage.
 
 #### ✅ \[POST\] /api/post \[AUTH Required\]
 
-Description: Posts a new post with the body of "title, body, forumName" using the auth token
+Description: Posts a new post with the body of "title, body, forumName" using the auth token.
+
+Request Fields: title, body, forumName
+
+Response on Success: JSON object with "id" int64. Should be managed as a string on platforms and languages without a 64 bit integer type.
 
 #### ✅ \[GET\] /api/post/<forum_name>/<post_id> \[AUTH OPTIONAL\]
 
