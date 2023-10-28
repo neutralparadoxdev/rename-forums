@@ -209,7 +209,7 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(400)
 		}
 
-		if len(req.Title) == 0 || len(req.Body) == 0 || len(req.ForumName) == 0 {
+		if len(req.Title) == 0 || len(req.ForumName) == 0 {
 			return c.SendStatus(400)
 		}
 
