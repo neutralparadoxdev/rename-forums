@@ -35,8 +35,17 @@ func (session *Session) GetUserId() (int64, error) {
 	}
 }
 
-func (session *Session) GetUsername() string {
-	return ""
+func (session *Session) GetUsername() (string, error) {
+	if claims, ok := session.Token.Claims.(jwt.MapClaims); ok && session.Token.Valid {
+		res, exists := claims["username"].(string)
+		if !exists {
+			return "", errors.New("get_user_name: username is not in token")
+		}
+
+		return res, nil
+	} else {
+		return "", errors.New("get_user_name: could not get username")
+	}
 }
 
 func (session *Session) IsValid() bool {

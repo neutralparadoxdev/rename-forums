@@ -20,6 +20,7 @@ func (w *WebApi) Init(app *core.App) error {
 	MountForum(w.fiberApp, app)
 	MountPost(w.fiberApp, app)
 	MountGroup(w.fiberApp, app)
+	MountMe(w.fiberApp, app)
 
 	return nil
 }
