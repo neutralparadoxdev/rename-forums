@@ -13,7 +13,7 @@ function genLink(): string {
 
 export const PostStub: React.FC<PostStubProps> = ({ title, authorName, subforum, id }: PostStubProps) => {
     return (
-        <li key={(id)}
+        <li 
             className="p-1 border-2 min-w-max grid grid-rows-4 grid-cols-[3%_98%]">
             <a className="grid-row-1 col-start-1 col-end-1 row-span-2 hover:border-2 hover:text-red-500" href={""}>👍</a>
             <a className="grid-row-3 col-start-1 col-end-1 row-span-2 hover:border-2 hover:text-red-500" href={""}>👎</a>

@@ -12,7 +12,7 @@ export const PostList: FC<PostListProps> = ({ posts }: PostListProps) => {
     return (
         <>
         <ul> 
-            { posts.map((x) => <PostStub {...x}></PostStub> )}
+            { posts.map((x) => <PostStub key={x.id} {...x}></PostStub> )}
         </ul>
         </>
     );
