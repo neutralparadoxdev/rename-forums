@@ -3,6 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { LoadingComponent } from '../features/loading/Loading';
 import { ErrorComponent } from '../features/error/Error';
 import { Header } from '../features/header/header';
+import { SignUpLoginModalPurpose } from '../features/signup-login/SignUpLoginModal';
 
 type ForumStubProps = {
     title: string,
@@ -24,6 +25,8 @@ const ForumsPage: FC<ForumsPageProps> = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [loginSignupState, setLoginSignupState] = useState<SignUpLoginModalPurpose | null>(null);
+
     useEffect(() => {
         setIsLoading(true);
         fetch("/api/forum")
@@ -42,10 +45,14 @@ const ForumsPage: FC<ForumsPageProps> = () => {
 
     const page = (
         <>
-        <Header title="Forums List" link={null} />
+        <Header title="Forums List" link={null} loginSignUpState={loginSignupState} setLoginSignUpState={setLoginSignupState}/>
         <main className="p-2 min-w-full">
             <ol>
-                { forumList.map(x => <ForumStub {...x}/>) }
+                { forumList.toSorted((a, b) => { 
+                    if (a.title < b.title) return -1;
+                    if (a.title > b.title) return 1;
+                    return 0;
+                }).map(x => <ForumStub key={x.title} {...x}/>) }
             </ol>
         </main>
         </>
