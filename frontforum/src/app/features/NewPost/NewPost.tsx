@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
 
 export type NewPostProps = {
@@ -7,6 +8,7 @@ export type NewPostProps = {
 }
 
 export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostProps) => {
+    const router = useRouter();
     if (forums.length === 0) return <></>;
 
     const [toggle, setToggle] = useState<boolean>(false);
@@ -33,6 +35,25 @@ export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostP
         const token = localStorage.getItem("session-token")
 
         if(token !== null) {
+            fetch("/api/post", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Bearer-Token": token,
+                },
+                body: JSON.stringify({
+                    title: title,
+                    body: postText,
+                    forumName: forumSelected
+                })
+            })
+            .then(data => data.json())
+            .then(data => {
+                router.push(`/f/${forumSelected}/${data.id}`)
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
     }
 
