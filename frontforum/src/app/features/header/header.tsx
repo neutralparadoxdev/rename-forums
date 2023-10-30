@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { SignUpLoginModal, SignUpLoginModalPurpose } from "../signup-login/SignUpLoginModal";
 import { useRouter } from "next/navigation";
 
@@ -11,12 +11,14 @@ export type HeaderProps = {
 }
 
 export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLoginSignUpState} : HeaderProps) => {
+    const [username, setUsername] = useState<string>("");
     const router = useRouter();
 
     const sessionToken = localStorage.getItem('session-token')
 
-    function logout() {
+    const [reload, triggerReload] = useState<boolean>(false);
 
+    function logout() {
         const token = localStorage.getItem('session-token')
 
         if(token !== null) {
@@ -29,9 +31,28 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             .finally(() => {
                 localStorage.setItem('session-token', "")
                 router.refresh()
+                triggerReload(val => !val);
             })
         }
     }
+
+    useEffect(() => {
+        if(sessionToken !== null &&  sessionToken != "") {
+            fetch('/api/me', {
+                method: "GET",
+                headers: {
+                    'Bearer-Token': sessionToken
+                },
+            })
+            .then(data => data.json())
+            .then(data => {
+                setUsername(data.username);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    }, [sessionToken])
 
     return (<>
         { loginSignUpState != null ? 
@@ -53,6 +74,7 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             <button className="hover:text-red-400" onClick={() => setLoginSignUpState(SignUpLoginModalPurpose.Login)}>Log In</button>
             </> : 
             <>
+            <span className="mr-2">{ username }</span>
             <button className="mr-2 hover:text-red-400" onClick={logout}>Logout</button>
             </>
             }
