@@ -141,6 +141,16 @@ return data: posts
 
 Work Status: Returns everything for now.
 
+###  Me
+
+#### ✅ \[GET\] /api/me \[AUTH REQUIRED\]
+
+Description: Returns data for the user requested
+
+return data: username, created_at, last_login, last_modified
+
+Work Status: Complete
+
 
 #### Event Websocket
 
