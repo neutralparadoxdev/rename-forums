@@ -8,7 +8,18 @@ function getForumFromPath(path: string): string {
     if(path === "/") {
         return "";
     }
+    if (path == "/forum/new") {
+        return ""
+    }
     const list =  path.split("/")
+
+    if(list[1] == "user") {
+        return "";
+    }
+
+    if(list.length == 4) {
+        return list[list.length-2]
+    }
 
     return list[list.length-1]
 }
@@ -38,6 +49,7 @@ export const ForumDropDown: FC<{}> = () => {
         if(/\s/.test(e.target.value)) {
             return
         }
+
         e.preventDefault();
         setForumSelect(e.target.value.toLocaleLowerCase());
     }

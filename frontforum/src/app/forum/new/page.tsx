@@ -11,7 +11,9 @@ enum PublicityState {
 }
 
 const NewForumPage: FC<{}> = () => {
-    const [loginSignupState, setLoginSignUpState] = useState<SignUpLoginModalPurpose | null>(null);
+    const sessionToken = localStorage.getItem("session-token");
+    const [loginSignupState, setLoginSignUpState] = useState<SignUpLoginModalPurpose | null>(
+        (sessionToken === null || sessionToken === "") ? SignUpLoginModalPurpose.Login : null)
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -25,7 +27,13 @@ const NewForumPage: FC<{}> = () => {
 
     return ( 
     <>
-    <Header  link={null} title="Create a Forum" loginSignUpState={loginSignupState} setLoginSignUpState={setLoginSignUpState}/>
+    <Header 
+        link={null} 
+        title="Create a Forum" 
+        loginSignUpState={loginSignupState} 
+        setLoginSignUpState={setLoginSignUpState}
+        sessionRequired={true}
+    />
     <main>
         <form className="p-2">
             <label htmlFor="title">Title</label>
