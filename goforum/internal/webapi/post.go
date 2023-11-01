@@ -58,7 +58,7 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(400)
 		}
 
-		if (req.Title != nil && len(*req.Title) == 0) || (req.Body != nil && len(*req.Body) == 0) {
+		if req.Title != nil && len(*req.Title) == 0 {
 			return c.SendStatus(400)
 		}
 
