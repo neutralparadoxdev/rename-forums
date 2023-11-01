@@ -10,16 +10,24 @@ export type HeaderProps = {
     title: string,
     link: string | null,
     loginSignUpState: SignUpLoginModalPurpose | null, 
-    setLoginSignUpState: (purpose: SignUpLoginModalPurpose | null) => void
+    setLoginSignUpState: (purpose: SignUpLoginModalPurpose | null) => void,
+    sessionRequired?: boolean
 }
 
-export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLoginSignUpState} : HeaderProps) => {
+export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLoginSignUpState, sessionRequired} : HeaderProps) => {
     const [username, setUsername] = useState<string>("");
     const router = useRouter();
 
     const sessionToken = localStorage.getItem('session-token')
 
     const [reload, triggerReload] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(sessionRequired !== undefined && (sessionToken === null || sessionToken === "") && loginSignUpState === null) {
+            setLoginSignUpState(SignUpLoginModalPurpose.Login)
+        }
+
+    }, [loginSignUpState])
 
     function logout() {
         const token = localStorage.getItem('session-token')
@@ -36,6 +44,9 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
                 router.refresh()
                 triggerReload(val => !val);
             })
+        }
+        if(sessionRequired !== undefined) {
+            setLoginSignUpState(SignUpLoginModalPurpose.Login);
         }
     }
 
@@ -57,6 +68,10 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
         }
     }, [sessionToken])
 
+    function TriggerLogin() {
+        setLoginSignUpState(SignUpLoginModalPurpose.Login);
+    }
+
     return (<>
         { loginSignUpState != null ? 
         <SignUpLoginModal 
@@ -66,24 +81,26 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             setAuthToken={(token) => { setLoginSignUpState(null); }}
             /> : 
             <></> }
-    <header className="border-b-4 border-[blue]  flex justify-between p-3">
+    <header className="border-b-4 border-[blue] flex justify-between p-3">
         <div className="flex flex-row">
         { link !== null ? <h1 className="capitalize text-3xl font-bold"><a href={link}> {title}</a></h1> 
         : <h1 className="capitalize text-3xl font-bold">{title}</h1> }
         <ForumDropDown />
         </div>
 
-        <div className="mt-auto mb-0">
+        <div className="flex flex-row min-w-fit justify-between gap-1 align-center">
             { sessionToken === null || sessionToken === "" ?
             <>
-            <Link className="border-2 mb-6 p-1 w-24" href="/forum/new">Create a Forum</Link>
-            <button className="mr-2 hover:text-red-400" onClick={() => setLoginSignUpState(SignUpLoginModalPurpose.SignUp)}>Sign Up</button>
-            <button className="hover:text-red-400" onClick={() => setLoginSignUpState(SignUpLoginModalPurpose.Login)}>Log In</button>
+            <button className="border-2 text-left min-w-fit p-1" onClick={TriggerLogin}>Create Forum</button>
+            <button className="border-2 hover:text-red-400 min-w-fit p-1" onClick={() => setLoginSignUpState(SignUpLoginModalPurpose.SignUp)}>Sign Up</button>
+            <button className="border-2 hover:text-red-400 min-w-fit p-1" onClick={() => setLoginSignUpState(SignUpLoginModalPurpose.Login)}>Log In</button>
             </> : 
             <>
-            <Link className="border-2 mb-6 p-1 w-24" href="/forum/new">Create a Forum</Link>
-            <span className="mr-2">{ username }</span>
-            <button className="mr-2 hover:text-red-400" onClick={logout}>Logout</button>
+            <div className="border-2 flex flex-col justify-center">
+                <Link className="text-center align-middle content-center" href="/forum/new">Create Forum</Link>
+            </div>
+            <div className="border-2 align-middle flex flex-col justify-center"><p className="max-h-fit max-w-fit">{ `User: ${username}` }</p></div>
+            <button className="border-2 p-1 hover:text-red-400" onClick={logout}>Logout</button>
             </>
             }
         </div>
