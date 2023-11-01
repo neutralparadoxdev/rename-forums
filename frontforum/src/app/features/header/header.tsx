@@ -45,6 +45,9 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
                 triggerReload(val => !val);
             })
         }
+        if(sessionRequired !== undefined) {
+            setLoginSignUpState(SignUpLoginModalPurpose.Login);
+        }
     }
 
     useEffect(() => {
