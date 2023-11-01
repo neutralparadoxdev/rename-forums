@@ -198,9 +198,9 @@ func MountPost(router fiber.Router, app *core.App) {
 		}
 
 		type NewPostRequest struct {
-			Title     string `json:"title" form:"title"`
-			Body      string `json:"body" form:"body"`
-			ForumName string `json:"forumName" form:"forumName"`
+			Title string `json:"title" form:"title"`
+			Body  string `json:"body" form:"body"`
+			Forum string `json:"forum" form:"forum"`
 		}
 
 		req := new(NewPostRequest)
@@ -209,7 +209,7 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(400)
 		}
 
-		if len(req.Title) == 0 || len(req.ForumName) == 0 {
+		if len(req.Title) == 0 || len(req.Forum) == 0 {
 			return c.SendStatus(400)
 		}
 
@@ -219,7 +219,7 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(500)
 		}
 
-		postId, err := app.GetPostManager().CreatePost(req.Title, req.Body, req.ForumName, userId)
+		postId, err := app.GetPostManager().CreatePost(req.Title, req.Body, req.Forum, userId)
 
 		if err != nil {
 			return c.SendStatus(500)

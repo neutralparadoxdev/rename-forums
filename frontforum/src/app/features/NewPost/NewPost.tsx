@@ -44,7 +44,7 @@ export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostP
                 body: JSON.stringify({
                     title: title,
                     body: postText,
-                    forumName: forumSelected
+                    forum: forumSelected
                 })
             })
             .then(data => data.json())

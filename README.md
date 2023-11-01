@@ -43,6 +43,14 @@ Request Fields: title, body, forumName
 
 Response on Success: JSON object with "id" int64. Should be managed as a string on platforms and languages without a 64 bit integer type.
 
+```go
+type NewPostRequest struct {
+	Title string `json:"title" form:"title"`
+	Body  string `json:"body" form:"body"`
+	Forum string `json:"forum" form:"forum"`
+}
+```
+
 #### ✅ \[GET\] /api/post/<forum_name>/<post_id> \[AUTH OPTIONAL\]
 
 Description: Get Post with Id
