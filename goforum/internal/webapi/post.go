@@ -43,12 +43,14 @@ func MountPost(router fiber.Router, app *core.App) {
 
 		type PostPatchRequest struct {
 			Title *string `json:"title" form:"title"`
-			Body  *string `json:"body" form"body"`
+			Body  *string `json:"body" form:"body"`
 		}
 
 		req := new(PostPatchRequest)
 
 		if err := c.BodyParser(req); err != nil {
+			log.Print("/api/post/:form/:id[PATCH]: Body parser error")
+			log.Print(err)
 			return c.SendStatus(400)
 		}
 
