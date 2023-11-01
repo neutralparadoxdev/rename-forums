@@ -1,9 +1,10 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 
 import { Header } from '@/app/features/header/header';
 import { SignUpLoginModalPurpose } from '@/app/features/signup-login/SignUpLoginModal';
+import { useRouter } from 'next/navigation';
 
 enum PublicityState {
     PUBLIC,
@@ -20,9 +21,47 @@ const NewForumPage: FC<{}> = () => {
     const [publicity, setPublicity] = useState<PublicityState>(PublicityState.PRIVATE)
 
     const [titleMessage, setTitleMessage] = useState<boolean>(false);
+
+    const router = useRouter();
     
     function processTitleChange(text: string) {
+        if(/\s/.test(text)) {
+            return
+        }
         setTitle(text)
+    }
+
+    async function submit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        if(sessionToken === null || sessionToken === "") {
+            return
+        }
+
+        try {
+            const res = await fetch("/api/forum", {
+                method: "POST",
+                headers: {
+                    "Bearer-Token" : sessionToken,
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    "title": title,
+                    "description": description,
+                    "is_public" : publicity === PublicityState.PRIVATE ? false : true,
+                })
+            })
+
+            if (res.status === 204) {
+                router.push(`/f/${title}`)
+                return;
+            }
+        }
+        catch(err) {
+            console.log(err)
+        }
+
+
     }
 
     return ( 
@@ -35,7 +74,7 @@ const NewForumPage: FC<{}> = () => {
         sessionRequired={true}
     />
     <main>
-        <form className="p-2">
+        <form className="p-2" onSubmit={submit}>
             <label htmlFor="title">Title</label>
             <input value={title} onChange={x => processTitleChange(x.target.value)} id="title" name="title" type="text" className="border-2 p-2 mb-2 min-w-full" required/>
             <label htmlFor="description">Description</label>

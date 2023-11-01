@@ -10,9 +10,9 @@ func NewForumManager(db Database) *ForumManager {
 	}
 }
 
-func (man *ForumManager) CreateForum(title, description string, ownerId int64) error {
+func (man *ForumManager) CreateForum(title, description string, ownerId int64, isPublic bool) error {
 	repo := man.db.GetForumRepository()
-	return repo.Create(title, description, ownerId)
+	return repo.Create(title, description, ownerId, isPublic)
 }
 
 func (man *ForumManager) GetAll(userId *int64) ([]Forum, error) {

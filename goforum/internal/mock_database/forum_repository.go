@@ -54,10 +54,12 @@ func (repo *ForumRepository) Delete(forum core.Forum) error {
 	return nil
 }
 
-func (repo *ForumRepository) Create(title, description string, ownerId int64) error {
+func (repo *ForumRepository) Create(title, description string, ownerId int64, isPublic bool) error {
 	repo.forums[title] = core.Forum{
+		Title:        title,
 		Description:  description,
 		OwnerListIds: append(make([]int64, 1), ownerId),
+		IsPublic:     isPublic,
 	}
 	return nil
 }
