@@ -30,6 +30,7 @@ func MountForum(router fiber.Router, app *core.App) {
 		type NewForumRequest struct {
 			Title       string `json:"title" form:"title"`
 			Description string `json:"description" form:"description"`
+			IsPublic    bool   `json:"is_public" form:"is_public"`
 		}
 
 		req := new(NewForumRequest)
@@ -44,11 +45,12 @@ func MountForum(router fiber.Router, app *core.App) {
 			return c.SendStatus(400)
 		}
 
-		err = app.GetForumManager().CreateForum(req.Title, req.Description, ownerId)
+		err = app.GetForumManager().CreateForum(req.Title, req.Description, ownerId, req.IsPublic)
 		if err != nil {
 			return c.SendStatus(500)
 		}
-		return c.SendStatus(201)
+		log.Print("We created it")
+		return c.SendStatus(204)
 	})
 
 	group.Get("/:forumName", func(c *fiber.Ctx) error {

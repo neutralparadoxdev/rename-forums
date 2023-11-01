@@ -18,7 +18,7 @@ type SessionRepository interface {
 type ForumRepository interface {
 	GetByName(name string) (*Forum, error)
 	Delete(forum Forum) error
-	Create(title string, description string, ownerId int64) error
+	Create(title string, description string, ownerId int64, isPublic bool) error
 	GetAll(userId *int64) ([]Forum, error)
 }
 
