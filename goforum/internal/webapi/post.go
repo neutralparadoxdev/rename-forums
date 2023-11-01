@@ -13,6 +13,66 @@ import (
 func MountPost(router fiber.Router, app *core.App) {
 	group := router.Group("/api/post/")
 
+	group.Patch("/:forum/:id", func(c *fiber.Ctx) error {
+		stringId := c.Params("id")
+
+		postId, err := strconv.ParseInt(stringId, 10, 64)
+
+		if err != nil {
+			return c.SendStatus(404)
+		}
+
+		//forumName := c.Params("forumName")
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		userId, err := session.GetUserId()
+
+		if err != nil {
+			return c.SendStatus(fiber.StatusUnauthorized)
+		}
+
+		type PostPatchRequest struct {
+			Title *string `json:"title" form:"title"`
+			Body  *string `json:"body" form"body"`
+		}
+
+		req := new(PostPatchRequest)
+
+		if err := c.BodyParser(req); err != nil {
+			return c.SendStatus(400)
+		}
+
+		if req.Title == nil && req.Body == nil {
+			return c.SendStatus(400)
+		}
+
+		if (req.Title != nil && len(*req.Title) == 0) || (req.Body != nil && len(*req.Body) == 0) {
+			return c.SendStatus(400)
+		}
+
+		patched, perr := app.GetPostManager().PatchPost(userId, postId, req.Title, req.Body)
+
+		if perr != nil {
+			return c.SendStatus(500)
+		}
+
+		if patched {
+			return c.SendStatus(fiber.StatusNoContent)
+		} else {
+			return c.SendStatus(400)
+		}
+	})
+
 	group.Post("/:forumName/:id/upvote", func(c *fiber.Ctx) error {
 		stringId := c.Params("id")
 

@@ -37,6 +37,7 @@ type PostRepository interface {
 	GetPost(userId int64) (*Post, error)
 	AddVote(postId int64, vote int64) error
 	RemoveVote(postId int64, vote int64) error
+	Patch(userId int64, postId int64, title *string, body *string) (bool, error)
 }
 
 type VoteRepository interface {

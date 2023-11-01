@@ -127,3 +127,33 @@ func (repo *PostRepository) RemoveVote(postId int64, vote int64) error {
 	}
 
 }
+
+func (repo *PostRepository) Patch(userId int64, postId int64, title *string, body *string) (bool, error) {
+	// check and validate post
+	post, exists := repo.posts[postId]
+
+	if exists {
+		if post.OwnerId == userId {
+			// patch
+			if title != nil {
+				// patch user
+				post.Title = *title
+			}
+
+			if body != nil {
+				// patch body
+				post.Body = *body
+			}
+
+			repo.posts[postId] = post
+			return true, nil
+		} else {
+			// owner is not correct
+			return false, nil
+
+		}
+	} else {
+		// post doesnt exist
+		return false, nil
+	}
+}

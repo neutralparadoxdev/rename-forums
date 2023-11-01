@@ -112,3 +112,7 @@ func (man *PostManager) GetAllPosts(userId *int64) ([]Post, error) {
 
 	}
 }
+
+func (man *PostManager) PatchPost(userId int64, postId int64, title *string, body *string) (bool, error) {
+	return man.db.GetPostRepository().Patch(userId, postId, title, body)
+}
