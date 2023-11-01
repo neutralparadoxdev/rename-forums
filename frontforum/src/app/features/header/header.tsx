@@ -2,7 +2,9 @@ import { useSearchParams } from "next/navigation";
 import { FC, useState, useEffect } from "react";
 import { SignUpLoginModal, SignUpLoginModalPurpose } from "../signup-login/SignUpLoginModal";
 import { useRouter } from "next/navigation";
+import { ForumDropDown } from '../ForumDropDown/ForumDropDown';
 import Link from "next/link";
+
 
 export type HeaderProps = {
     title: string,
@@ -65,8 +67,11 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             /> : 
             <></> }
     <header className="border-b-4 border-[blue]  flex justify-between p-3">
+        <div className="flex flex-row">
         { link !== null ? <h1 className="capitalize text-3xl font-bold"><a href={link}> {title}</a></h1> 
         : <h1 className="capitalize text-3xl font-bold">{title}</h1> }
+        <ForumDropDown />
+        </div>
 
         <div className="mt-auto mb-0">
             { sessionToken === null || sessionToken === "" ?
