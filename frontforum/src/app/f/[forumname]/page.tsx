@@ -60,24 +60,57 @@ export default function ForumPage() {
 
 
   useEffect(() => {
-    fetch("/api/forum/" + pathParam)
-    .then(data => {
-      return data.json()
-    })
-    .then((data : any) => {
-      setPosts(data.posts.map((post: PostData) => {post.subforum = pathParam; return post}));
-      setForumData({
-        title: data.title,
-        description: data.description,
-      });
-    })
-    .catch(err => {
-      setError(err);
-    })
-    .finally(() => {
-      setIsLoading(false);
+
+    const sessionToken = localStorage.getItem('session-token')
+
+    if (sessionToken === null|| sessionToken === "") {
+      fetch("/api/forum/" + pathParam)
+      .then(data => {
+        return data.json()
+      })
+      .then((data : any) => {
+        setPosts(data.posts.map((post: PostData) => {post.subforum = pathParam; return post}));
+        setForumData({
+          title: data.title,
+          description: data.description,
+        });
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      }
+      )
+      return
     }
-    )
+    else {
+      fetch("/api/forum/" + pathParam, {
+        headers: {
+          "Bearer-Token" : sessionToken
+        }
+      })
+      .then(data => {
+        return data.json()
+      })
+      .then((data : any) => {
+        setPosts(data.posts.map((post: PostData) => {post.subforum = pathParam; return post}));
+        setForumData({
+          title: data.title,
+          description: data.description,
+        });
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      }
+      )
+      return
+
+
+    }
   })
 
   const page = (

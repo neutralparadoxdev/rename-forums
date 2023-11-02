@@ -31,7 +31,6 @@ func (f *Forum) CanPost(userId int64) bool {
 }
 
 func (f *Forum) CanViewPosts(userId *int64) bool {
-
 	if userId == nil {
 		return f.IsPublic
 	} else {

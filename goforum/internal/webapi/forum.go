@@ -49,7 +49,6 @@ func MountForum(router fiber.Router, app *core.App) {
 		if err != nil {
 			return c.SendStatus(500)
 		}
-		log.Print("We created it")
 		return c.SendStatus(204)
 	})
 
@@ -78,8 +77,11 @@ func MountForum(router fiber.Router, app *core.App) {
 		}
 
 		if forum == nil {
-			log.Printf("Forum Not found")
 			return c.SendStatus(404)
+		}
+
+		if session == nil && !forum.IsPublic {
+			return c.SendStatus(fiber.StatusUnauthorized)
 		}
 
 		if session != nil {

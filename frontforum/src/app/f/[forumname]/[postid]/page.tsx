@@ -126,18 +126,38 @@ const PostPage: FC<PostPageProps> = () => {
     }
 
     useEffect(() => {
+        
         setIsLoading(true);
-        fetch("/api/post/" + forumName + "/" + postId)
-        .then(data => data.json())
-        .then(data => {
-            setIsLoading(false);
-            setPost(data);
-        })
-        .catch(err => {
-            setIsLoading(false);
-            setError(err);
-            console.log(err)
-        })
+        if(sessionToken === null || sessionToken === "") {
+            fetch("/api/post/" + forumName + "/" + postId)
+            .then(data => data.json())
+            .then(data => {
+                setIsLoading(false);
+                setPost(data);
+            })
+            .catch(err => {
+                setIsLoading(false);
+                setError(err);
+                console.log(err)
+            })
+        } else {
+            fetch("/api/post/" + forumName + "/" + postId, {
+                headers: {
+                    "Bearer-Token": sessionToken
+                }
+            })
+            .then(data => data.json())
+            .then(data => {
+                setIsLoading(false);
+                setPost(data);
+            })
+            .catch(err => {
+                setIsLoading(false);
+                setError(err);
+                console.log(err)
+            })
+           
+        }
     }, [refresh])
 
     const page = post !== null ? (
