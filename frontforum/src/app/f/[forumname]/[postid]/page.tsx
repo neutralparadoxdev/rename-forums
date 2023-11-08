@@ -120,6 +120,8 @@ const PostPage: FC<PostPageProps> = () => {
 
     const [refresh, setRefresh] = useState<boolean>(false);
 
+    const [username, setUsername] = useState<string | null>(null);
+
     const sessionToken = localStorage.getItem('session-token')
 
     function setPromptDeletePost() {
@@ -129,6 +131,7 @@ const PostPage: FC<PostPageProps> = () => {
         
         setIsLoading(true);
         if(sessionToken === null || sessionToken === "") {
+
             fetch("/api/post/" + forumName + "/" + postId)
             .then(data => data.json())
             .then(data => {
@@ -148,6 +151,7 @@ const PostPage: FC<PostPageProps> = () => {
             })
             .then(data => data.json())
             .then(data => {
+                console.log(data)
                 setIsLoading(false);
                 setPost(data);
             })
@@ -156,7 +160,20 @@ const PostPage: FC<PostPageProps> = () => {
                 setError(err);
                 console.log(err)
             })
-           
+
+            fetch('/api/me', {
+                method: "GET",
+                headers: {
+                    'Bearer-Token': sessionToken
+                },
+            })
+            .then(data => data.json())
+            .then(data => {
+                setUsername(data.username);
+            })
+            .catch(err => {
+                console.log(err);
+            })
         }
     }, [refresh])
 
@@ -179,7 +196,7 @@ const PostPage: FC<PostPageProps> = () => {
                     <div className="flex flex-col justify-center">
                         <h2 className="text-2xl font-bold">{post.title}</h2>
                     </div>
-                    { sessionToken !== "null" && sessionToken !== "" ?
+                    { sessionToken !== "null" && sessionToken !== "" && username !== null && username === post.authorName ?
                     <>
                     <button 
                         className="border-2 p-2 m-2 w-24 hover:text-blue-400 hover:border-blue-400 hover:font-bold" 
