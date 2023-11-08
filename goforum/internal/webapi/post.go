@@ -209,7 +209,21 @@ func MountPost(router fiber.Router, app *core.App) {
 				return c.SendStatus(404)
 			}
 
-			return c.JSON(post)
+			type PostDTO struct {
+				Title      string    `json:"title"`
+				Body       string    `json:"body"`
+				AuthorName string    `json:"authorName"`
+				CreatedAt  time.Time `json:"createdAt"`
+			}
+
+			postdto := PostDTO{
+				Title:      post.Title,
+				Body:       post.Body,
+				AuthorName: post.AuthorName,
+				CreatedAt:  post.CreatedAt,
+			}
+
+			return c.JSON(postdto)
 		} else {
 			post, err := app.GetPostManager().GetPost(id, forumName, nil)
 
