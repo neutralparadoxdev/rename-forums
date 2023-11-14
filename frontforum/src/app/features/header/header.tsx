@@ -4,6 +4,7 @@ import { SignUpLoginModal, SignUpLoginModalPurpose } from "../signup-login/SignU
 import { useRouter } from "next/navigation";
 import { ForumDropDown } from '../ForumDropDown/ForumDropDown';
 import Link from "next/link";
+import { DeleteSessionToken, GetSessionToken } from "@/app/services/SessionManager/session";
 
 
 export type HeaderProps = {
@@ -18,7 +19,7 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
     const [username, setUsername] = useState<string>("");
     const router = useRouter();
 
-    const sessionToken = localStorage.getItem('session-token')
+    const sessionToken = GetSessionToken();
 
     const [reload, triggerReload] = useState<boolean>(false);
 
@@ -30,7 +31,7 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
     }, [loginSignUpState])
 
     function logout() {
-        const token = localStorage.getItem('session-token')
+        const token = GetSessionToken();
 
         if(token !== null) {
             fetch('/api/session',{
@@ -40,7 +41,7 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
                 },
             })
             .finally(() => {
-                localStorage.setItem('session-token', "")
+                DeleteSessionToken();
                 router.refresh()
                 triggerReload(val => !val);
             })

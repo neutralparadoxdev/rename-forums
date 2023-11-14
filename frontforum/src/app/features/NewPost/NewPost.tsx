@@ -1,3 +1,4 @@
+import { GetSessionToken } from "@/app/services/SessionManager/session";
 import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
 
@@ -17,7 +18,7 @@ export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostP
     const [title, setTitle] = useState<string>("");
 
     function expandComponent() {
-        const token = localStorage.getItem("session-token") 
+        const token = GetSessionToken();
 
         if(token !== null && token !== "") {
             setToggle(val => !val);
@@ -30,9 +31,7 @@ export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostP
 
     function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        //console.log(`(title, ${title})(body, ${postText})(forum, ${forumSelected})`)
-
-        const token = localStorage.getItem("session-token")
+        const token = GetSessionToken();
 
         if(token !== null) {
             fetch("/api/post", {

@@ -5,6 +5,7 @@ import { FC, FormEvent, useState } from 'react';
 import { Header } from '@/app/features/header/header';
 import { SignUpLoginModalPurpose } from '@/app/features/signup-login/SignUpLoginModal';
 import { useRouter } from 'next/navigation';
+import { GetSessionToken } from '@/app/services/SessionManager/session';
 
 enum PublicityState {
     PUBLIC,
@@ -12,7 +13,7 @@ enum PublicityState {
 }
 
 const NewForumPage: FC<{}> = () => {
-    const sessionToken = localStorage.getItem("session-token");
+    const sessionToken = GetSessionToken();
     const [loginSignupState, setLoginSignUpState] = useState<SignUpLoginModalPurpose | null>(
         (sessionToken === null || sessionToken === "") ? SignUpLoginModalPurpose.Login : null)
 

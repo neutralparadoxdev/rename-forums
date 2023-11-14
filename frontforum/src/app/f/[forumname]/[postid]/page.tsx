@@ -7,6 +7,7 @@ import { SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLogin
 import { usePathname } from "next/navigation";
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import { GetSessionToken, SessionTokenExist } from "@/app/services/SessionManager/session";
 
 type PostPageProps = {}
 
@@ -43,9 +44,9 @@ const PostEditor: FC<PostEditor> = ({title, body, id, author, form, update, clos
     async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const sessionToken = localStorage.getItem('session-token')
+        const sessionToken = GetSessionToken()
 
-        if (sessionToken === null || sessionToken === "") {
+        if (SessionTokenExist()) {
             console.log("submit:no session")
             return
         }

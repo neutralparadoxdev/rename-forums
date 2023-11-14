@@ -1,3 +1,4 @@
+import { SetSessionToken } from "@/app/services/SessionManager/session";
 import { useRouter } from "next/navigation";
 import { EventHandler, FC, FormEvent, FormEventHandler, useState } from "react";
 
@@ -31,7 +32,7 @@ export const LoginComponent: FC<LoginComponentProps> = ({ close, swap, setAuthTo
             throw Error("response is not ok")
         })
         .then(data => {
-            localStorage.setItem('session-token', data)
+            SetSessionToken(data)
             setAuthToken(data)
             router.refresh()
         })
