@@ -9,6 +9,7 @@ import { Header } from '@/app/features/header/header';
 
 import { NewPost } from '../../features/NewPost/NewPost';
 import { SignUpLoginModalPurpose } from '@/app/features/signup-login/SignUpLoginModal';
+import { GetSessionToken } from '@/app/services/SessionManager/session';
 
 /*
 		type PostDTO struct {
@@ -61,7 +62,7 @@ export default function ForumPage() {
 
   useEffect(() => {
 
-    const sessionToken = localStorage.getItem('session-token')
+    const sessionToken = GetSessionToken()
 
     if (sessionToken === null|| sessionToken === "") {
       fetch("/api/forum/" + pathParam)
