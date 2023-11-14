@@ -44,12 +44,13 @@ const PostEditor: FC<PostEditor> = ({title, body, id, author, form, update, clos
     async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const sessionToken = GetSessionToken()
 
         if (SessionTokenExist()) {
             console.log("submit:no session")
             return
         }
+
+        const sessionToken = GetSessionToken()!
 
         if(editTitle.length === 0) {
             // cant be submitted
