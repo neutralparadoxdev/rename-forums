@@ -66,6 +66,10 @@ export default function ForumPage() {
     if (sessionToken === null|| sessionToken === "") {
       fetch("/api/forum/" + pathParam)
       .then(data => {
+        if(data.status === 404 || data.status === 401) {
+          setError("Not Found")
+          throw Error("Not Found")
+        }
         return data.json()
       })
       .then((data : any) => {
@@ -76,7 +80,7 @@ export default function ForumPage() {
         });
       })
       .catch(err => {
-        setError(err);
+        setError("Not Found");
       })
       .finally(() => {
         setIsLoading(false);
@@ -101,7 +105,7 @@ export default function ForumPage() {
         });
       })
       .catch(err => {
-        setError(err);
+        setError("Not Found");
       })
       .finally(() => {
         setIsLoading(false);
@@ -131,5 +135,5 @@ export default function ForumPage() {
     </>
   )
 
-  return (isLoading ? <LoadingComponent /> : (error !== null || true ? page : <ErrorComponent msg={error !== null ? "Some Error" : ""} />));
+  return (isLoading ? <LoadingComponent /> : (error === null ? page : <ErrorComponent msg={error} />));
 }

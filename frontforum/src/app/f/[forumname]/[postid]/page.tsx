@@ -140,7 +140,7 @@ const PostPage: FC<PostPageProps> = () => {
             })
             .catch(err => {
                 setIsLoading(false);
-                setError(err);
+                setError("Not Found");
                 console.log(err)
             })
         } else {
@@ -158,6 +158,7 @@ const PostPage: FC<PostPageProps> = () => {
             .catch(err => {
                 setIsLoading(false);
                 setError(err);
+                setError("Page Not Found")
                 console.log(err)
             })
 
@@ -172,6 +173,7 @@ const PostPage: FC<PostPageProps> = () => {
                 setUsername(data.username);
             })
             .catch(err => {
+                setError("Page Not Found")
                 console.log(err);
             })
         }
