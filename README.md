@@ -115,7 +115,7 @@ Work Status: Not Started
 
 body(forum|json): username & password
 
-return data: Bearer-Token
+return data: JSON { token: Bearer-Token, username: username }
 
 Description: Creates a new session using username password
 
