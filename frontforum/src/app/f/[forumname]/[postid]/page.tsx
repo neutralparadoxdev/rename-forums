@@ -123,7 +123,7 @@ const PostPage: FC<PostPageProps> = () => {
 
     const [username, setUsername] = useState<string | null>(null);
 
-    const sessionToken = localStorage.getItem('session-token')
+    const sessionToken = GetSessionToken();
 
     function setPromptDeletePost() {
     }
