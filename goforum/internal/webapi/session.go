@@ -29,7 +29,17 @@ func MountSession(router fiber.Router, app *core.App) {
 			return c.SendStatus(401)
 		}
 
-		return c.SendString(session.ToString())
+		type SessionResponse struct {
+			Token    string `json:"token"`
+			Username string `json:"username"`
+		}
+
+		response := SessionResponse{
+			Token:    session.ToString(),
+			Username: req.Username,
+		}
+
+		return c.JSON(response)
 	})
 
 	group.Delete("/", func(c *fiber.Ctx) error {

@@ -1,4 +1,4 @@
-import { SetSessionToken } from "@/app/services/SessionManager/session";
+import { SetSessionToken, SetUsername } from "@/app/services/SessionManager/session";
 import { useRouter } from "next/navigation";
 import { EventHandler, FC, FormEvent, FormEventHandler, useState } from "react";
 
@@ -27,13 +27,15 @@ export const LoginComponent: FC<LoginComponentProps> = ({ close, swap, setAuthTo
         })
         .then(data => {
             if(data.ok) {
-                return data.text()
+                return data.json()
             }
             throw Error("response is not ok")
         })
         .then(data => {
-            SetSessionToken(data)
-            setAuthToken(data)
+            console.log(data)
+            SetSessionToken(data.token)
+            SetUsername(data.username)
+            setAuthToken(data.token)
             router.refresh()
         })
         .catch(err => {

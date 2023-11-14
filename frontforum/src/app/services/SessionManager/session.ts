@@ -16,7 +16,7 @@ export function SetSessionToken(token: string) {
 }
 
 export function SetUsername(username: string) {
-     localStorage.setItem(SESSION_TOKEN, username);
+     localStorage.setItem(USERNAME, username);
 }
 
 export function DeleteSessionToken() {
