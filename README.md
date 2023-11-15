@@ -75,6 +75,12 @@ Description: removes vote if present. otherwise, silently fails
 
 Work: Status Done
 
+#### ✅ \[DELETE\] /api/post/:forumName/:id \[AUTH REQUIRED\]
+
+Description: removes post 
+
+Work Status: Done
+
 ### Forum
 
 #### ✅ \[POST\] /api/forum \[AUTH Required\]
