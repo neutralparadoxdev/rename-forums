@@ -157,3 +157,22 @@ func (repo *PostRepository) Patch(userId int64, postId int64, title *string, bod
 		return false, nil
 	}
 }
+
+func (repo *PostRepository) Delete(userId int64, postId int64) (bool, error) {
+	// check and validate post
+	post, exists := repo.posts[postId]
+
+	if exists {
+		if post.OwnerId == userId {
+			delete(repo.posts, postId)
+		} else {
+			// owner is not correct
+			return false, errors.New("owner_id_user_id_mismatch")
+		}
+	} else {
+		// post doesnt exist
+		return false, errors.New("post_not_found")
+	}
+
+	return true, nil
+}

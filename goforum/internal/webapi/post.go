@@ -171,6 +171,53 @@ func MountPost(router fiber.Router, app *core.App) {
 		return c.SendStatus(202)
 	})
 
+	group.Delete("/:forumName/:id", func(c *fiber.Ctx) error {
+		stringId := c.Params("id")
+
+		postId, err := strconv.ParseInt(stringId, 10, 64)
+		if err != nil {
+			return c.SendStatus(404)
+		}
+
+		//forumName := c.Params("forumName")
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(fiber.StatusUnauthorized)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		userId, err := session.GetUserId()
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		ok, err := app.GetPostManager().DeletePost(userId, postId)
+
+		if err != nil {
+			if err.Error() == "owner_id_user_id_mismatch" {
+				return c.SendStatus(401)
+			}
+
+			if err.Error() == "post_not_found" {
+				return c.SendStatus(404)
+			}
+
+			return c.SendStatus(500)
+		}
+
+		if ok {
+			return c.SendStatus(fiber.StatusNoContent)
+		} else {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+	})
+
 	group.Get("/:forumName/:id", func(c *fiber.Ctx) error {
 		stringId := c.Params("id")
 
