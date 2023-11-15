@@ -126,7 +126,12 @@ const PostPage: FC<PostPageProps> = () => {
 
     const sessionToken = GetSessionToken();
 
+    const [deletePostPrompt, setDeletePostPrompt] = useState<boolean>(true);
+
+    const router = useRouter();
+
     function setPromptDeletePost() {
+        setDeletePostPrompt(true);
     }
 
     useEffect(() => {
@@ -181,8 +186,48 @@ const PostPage: FC<PostPageProps> = () => {
         }
     }, [refresh])
 
+    async function deletePost() {
+
+        if(sessionToken === null || sessionToken === "") {
+            console.log("TRIED TO DELETE WITHOUT TOKEN")
+            return
+        }
+
+        let res = await fetch(`/api/post/${forumName}/${postId}`, {
+            method: "DELETE",
+            headers: {
+                "Bearer-Token" : sessionToken
+            }
+        })
+
+        if (res.status !== 204) {
+            console.log("COULD NOT DELETE")
+        } else {
+            router.push(`/f/${forumName}`)
+        }
+    }
+
     const page = post !== null ? (
         <>
+            {
+                deletePostPrompt ? 
+                <div className="w-screen h-screen bg-red-400 absolute">
+                    <div className="w-min-full h-min-full flex flex-col items-center justify-center mt-40">
+                        <div className="bg-white max-w-fit m-4 p-8">
+                            <h1 className="text-2xl text-center mt-4">Do you want to delete the Post?</h1>
+                            <h3 className="text-xl text-center mt-4">This is a permanent and not reversible</h3>
+                            <div className="flex flex-row justify-between mt-20">
+                                <button className="p-4 border-2 border-red-400 w-24 text-red-400"
+                                onClick={async () => deletePost()}>Delete</button>
+                                <button className="p-4 border-2 text-gray-400 w-24"
+                                    onClick={() => setDeletePostPrompt(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> :
+                <></>
+            }
+
             <Header title={forumName} link={"/f/" + forumName} loginSignUpState={loginSignUpState} setLoginSignUpState={(x) => { setLoginSignUpState(x); }}/>
             <main className="m-2">
                 { isEditing ? 
