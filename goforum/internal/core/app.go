@@ -17,6 +17,7 @@ type App struct {
 	ForumManager   *ForumManager
 	PostManager    *PostManager
 	VoteManager    *VoteManager
+	CommentManager *CommentManager
 }
 
 func (app *App) Init(config AppConfig) error {
@@ -33,6 +34,7 @@ func (app *App) Init(config AppConfig) error {
 	app.ForumManager = NewForumManager(app.Database)
 	app.PostManager = NewPostManager(app.Database)
 	app.VoteManager = NewVoteManager(app.Database)
+	app.CommentManager = NewCommentManager(app.Database)
 
 	return nil
 }
@@ -61,4 +63,8 @@ func (app *App) GetPostManager() *PostManager {
 
 func (app *App) GetVoteManager() *VoteManager {
 	return app.VoteManager
+}
+
+func (app *App) GetCommentManager() *CommentManager {
+	return app.CommentManager
 }

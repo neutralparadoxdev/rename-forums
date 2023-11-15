@@ -49,3 +49,16 @@ type VoteRepository interface {
 
 	GetVotesForPosts(userId int64, postIds []int64) ([]int64, error)
 }
+
+type CommentRepository interface {
+	DeleteComment(userId int64, commentId int64) (bool, error)
+
+	/// returns the new comment id or error
+	NewComment(postId *int64, commentId *int64, userId int64, text string) (int64, error)
+
+	/// Patch a comment
+	PatchComment(commentId int64, text string)
+
+	/// returns one or more comments
+	GetComment(commentId int64, depth int64) []*Comment
+}
