@@ -257,13 +257,6 @@ func MountPost(router fiber.Router, app *core.App) {
 			return c.SendStatus(404)
 		}
 
-		type CommentDTO struct {
-			Text         string `json:"text"`
-			CommentOwner string `json:"commentOwner"`
-			PostOwner    string `json:"postOwner"`
-			Id           string `json:"id"`
-		}
-
 		type PostDTO struct {
 			Title      string    `json:"title"`
 			Body       string    `json:"body"`
@@ -272,37 +265,12 @@ func MountPost(router fiber.Router, app *core.App) {
 			Comments   []CommentDTO
 		}
 
-		commentsDto := make([]CommentDTO, 0)
-
-		if post.Comments != nil {
-			for i := range *post.Comments {
-				postOwner := ""
-				commentOwner := ""
-
-				if (*post.Comments)[i].PostOwner != nil {
-					postOwner = fmt.Sprintf("%d", *((*post.Comments)[i].PostOwner))
-				}
-
-				if (*post.Comments)[i].CommentOwner != nil {
-					commentOwner = fmt.Sprintf("%d", *((*post.Comments)[i].CommentOwner))
-				}
-
-				commentDto := CommentDTO{
-					Text:         (*post.Comments)[i].Text,
-					CommentOwner: commentOwner,
-					PostOwner:    postOwner,
-					Id:           fmt.Sprintf("%d", (*post.Comments)[i].Id),
-				}
-				commentsDto = append(commentsDto, commentDto)
-			}
-		}
-
 		postdto := PostDTO{
 			Title:      post.Title,
 			Body:       post.Body,
 			AuthorName: post.AuthorName,
 			CreatedAt:  post.CreatedAt,
-			Comments:   commentsDto,
+			Comments:   commentsToCommentsDto(*post.Comments),
 		}
 
 		return c.JSON(postdto)

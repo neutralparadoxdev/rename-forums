@@ -1,7 +1,6 @@
 package webapi
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -49,36 +48,6 @@ func MountComment(router fiber.Router, app *core.App) {
 			return c.SendStatus(404)
 		}
 
-		type CommentDTO struct {
-			Text         string `json:"text"`
-			CommentOwner string `json:"commentOwner"`
-			PostOwner    string `json:"postOwner"`
-			Id           string `json:"id"`
-		}
-
-		commentsDto := make([]CommentDTO, 0)
-
-		for i := range comments {
-			postOwner := ""
-			commentOwner := ""
-
-			if comments[i].PostOwner != nil {
-				postOwner = fmt.Sprintf("%d", *comments[i].PostOwner)
-			}
-
-			if comments[i].CommentOwner != nil {
-				commentOwner = fmt.Sprintf("%d", *comments[i].CommentOwner)
-			}
-
-			commentDto := CommentDTO{
-				Text:         comments[i].Text,
-				CommentOwner: commentOwner,
-				PostOwner:    postOwner,
-				Id:           fmt.Sprintf("%d", comments[i].Id),
-			}
-			commentsDto = append(commentsDto, commentDto)
-		}
-
-		return c.JSON(commentsDto)
+		return c.JSON(commentsToCommentsDto(comments))
 	})
 }
