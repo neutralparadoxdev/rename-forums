@@ -258,10 +258,10 @@ func MountPost(router fiber.Router, app *core.App) {
 		}
 
 		type CommentDTO struct {
-			Text         string `json: "text"`
-			CommentOwner string `json:"commentOwner`
-			PostOwner    string `json: "postOwner"`
-			Id           string `json: "id"`
+			Text         string `json:"text"`
+			CommentOwner string `json:"commentOwner"`
+			PostOwner    string `json:"postOwner"`
+			Id           string `json:"id"`
 		}
 
 		type PostDTO struct {

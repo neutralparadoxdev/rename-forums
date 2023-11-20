@@ -90,9 +90,10 @@ func GetComments(id int64, depth int64, commentsOut *[]core.Comment, comments ma
 }
 
 func (repo *CommentRepository) GetComment(commentId int64, depth int64) ([]core.Comment, error) {
-	_, exists := repo.comments[commentId]
+	val, exists := repo.comments[commentId]
 	if exists {
 		commentsOut := make([]core.Comment, 0)
+		commentsOut = append(commentsOut, val)
 		GetComments(commentId, depth, &commentsOut, repo.comments)
 		return commentsOut, nil
 	}

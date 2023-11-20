@@ -21,6 +21,7 @@ func (w *WebApi) Init(app *core.App) error {
 	MountPost(w.fiberApp, app)
 	MountGroup(w.fiberApp, app)
 	MountMe(w.fiberApp, app)
+	MountComment(w.fiberApp, app)
 
 	return nil
 }

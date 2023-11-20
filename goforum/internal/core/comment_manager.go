@@ -18,6 +18,6 @@ func (man *CommentManager) CreateCommentForComment(userId int64, commentId int64
 	return man.database.GetCommentRepository().NewComment(nil, &commentId, userId, text)
 }
 
-func (man *CommentManager) GetComment(commentId int64) ([]Comment, error) {
+func (man *CommentManager) GetCommentWithUserSession(commentId int64, postId int64, forum string, session *Session) ([]Comment, error) {
 	return man.database.GetCommentRepository().GetComment(commentId, 3)
 }
