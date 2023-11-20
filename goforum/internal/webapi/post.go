@@ -239,102 +239,73 @@ func MountPost(router fiber.Router, app *core.App) {
 			}
 		}
 
+		var userId int64
 		if session != nil {
-			userId, err := session.GetUserId()
+			userId, err = session.GetUserId()
 
 			if err != nil {
 				return c.SendStatus(500)
 			}
-
-			post, err := app.GetPostManager().GetPost(id, forumName, &userId, true)
-
-			if err != nil {
-				return c.SendStatus(500)
-			}
-
-			if post == nil {
-				return c.SendStatus(404)
-			}
-
-			type CommentDTO struct {
-				Text         string `json: "text"`
-				CommentOwner string `json:"commentOwner`
-				PostOwner    string `json: "postOwner"`
-				Id           string `json: "id"`
-			}
-
-			type PostDTO struct {
-				Title      string    `json:"title"`
-				Body       string    `json:"body"`
-				AuthorName string    `json:"authorName"`
-				CreatedAt  time.Time `json:"createdAt"`
-				Comments   []CommentDTO
-			}
-
-			commentsDto := make([]CommentDTO, 0)
-
-			if post.Comments != nil {
-				for i := range *post.Comments {
-					postOwner := ""
-					commentOwner := ""
-
-					if (*post.Comments)[i].PostOwner != nil {
-						postOwner = fmt.Sprintf("%d", *((*post.Comments)[i].PostOwner))
-					}
-
-					if (*post.Comments)[i].CommentOwner != nil {
-						commentOwner = fmt.Sprintf("%d", *((*post.Comments)[i].CommentOwner))
-					}
-
-					commentDto := CommentDTO{
-						Text:         (*post.Comments)[i].Text,
-						CommentOwner: commentOwner,
-						PostOwner:    postOwner,
-						Id:           fmt.Sprintf("%d", (*post.Comments)[i].Id),
-					}
-					commentsDto = append(commentsDto, commentDto)
-				}
-			}
-
-			postdto := PostDTO{
-				Title:      post.Title,
-				Body:       post.Body,
-				AuthorName: post.AuthorName,
-				CreatedAt:  post.CreatedAt,
-				Comments:   commentsDto,
-			}
-
-			return c.JSON(postdto)
-		} else {
-			post, err := app.GetPostManager().GetPost(id, forumName, nil, false)
-
-			if err != nil {
-				if err.Error() == "user_cant_post" {
-					return c.SendStatus(401)
-				}
-				return c.SendStatus(500)
-			}
-
-			if post == nil {
-				return c.SendStatus(404)
-			}
-
-			type PostDTO struct {
-				Title      string    `json:"title"`
-				Body       string    `json:"body"`
-				AuthorName string    `json:"authorName"`
-				CreatedAt  time.Time `json:"createdAt"`
-			}
-
-			postdto := PostDTO{
-				Title:      post.Title,
-				Body:       post.Body,
-				AuthorName: post.AuthorName,
-				CreatedAt:  post.CreatedAt,
-			}
-
-			return c.JSON(postdto)
 		}
+		post, err := app.GetPostManager().GetPost(id, forumName, &userId, true)
+
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		if post == nil {
+			return c.SendStatus(404)
+		}
+
+		type CommentDTO struct {
+			Text         string `json: "text"`
+			CommentOwner string `json:"commentOwner`
+			PostOwner    string `json: "postOwner"`
+			Id           string `json: "id"`
+		}
+
+		type PostDTO struct {
+			Title      string    `json:"title"`
+			Body       string    `json:"body"`
+			AuthorName string    `json:"authorName"`
+			CreatedAt  time.Time `json:"createdAt"`
+			Comments   []CommentDTO
+		}
+
+		commentsDto := make([]CommentDTO, 0)
+
+		if post.Comments != nil {
+			for i := range *post.Comments {
+				postOwner := ""
+				commentOwner := ""
+
+				if (*post.Comments)[i].PostOwner != nil {
+					postOwner = fmt.Sprintf("%d", *((*post.Comments)[i].PostOwner))
+				}
+
+				if (*post.Comments)[i].CommentOwner != nil {
+					commentOwner = fmt.Sprintf("%d", *((*post.Comments)[i].CommentOwner))
+				}
+
+				commentDto := CommentDTO{
+					Text:         (*post.Comments)[i].Text,
+					CommentOwner: commentOwner,
+					PostOwner:    postOwner,
+					Id:           fmt.Sprintf("%d", (*post.Comments)[i].Id),
+				}
+				commentsDto = append(commentsDto, commentDto)
+			}
+		}
+
+		postdto := PostDTO{
+			Title:      post.Title,
+			Body:       post.Body,
+			AuthorName: post.AuthorName,
+			CreatedAt:  post.CreatedAt,
+			Comments:   commentsDto,
+		}
+
+		return c.JSON(postdto)
 	})
 
 	group.Post("/", func(c *fiber.Ctx) error {
