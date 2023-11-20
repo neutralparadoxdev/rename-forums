@@ -35,7 +35,7 @@ func (man *PostManager) CreatePost(title string, body string, forumName string, 
 	return man.db.GetPostRepository().Create(title, body, forumName, userId)
 }
 
-func (man *PostManager) GetPost(id int64, forumName string, userId *int64) (*Post, error) {
+func (man *PostManager) GetPost(id int64, forumName string, userId *int64, includeComments bool) (*Post, error) {
 	repoForum := man.db.GetForumRepository()
 
 	forum, err := repoForum.GetByName(forumName)
@@ -62,6 +62,15 @@ func (man *PostManager) GetPost(id int64, forumName string, userId *int64) (*Pos
 
 	if post == nil {
 		return nil, nil
+	}
+
+	if includeComments {
+		comments, err := man.db.GetCommentRepository().GetCommentForPost(id, 3)
+
+		if err != nil {
+			return nil, errors.New("get_post: Could not retrieve comments")
+		}
+		post.Comments = &comments
 	}
 
 	return post, nil

@@ -8,6 +8,7 @@ type MockDatabase struct {
 	forum   *ForumRepository
 	post    *PostRepository
 	vote    *VoteRepository
+	comment *CommentRepository
 }
 
 func New() *MockDatabase {
@@ -19,6 +20,7 @@ func New() *MockDatabase {
 		forum:   NewForumRepository(),
 		post:    NewPostRepository(user),
 		vote:    NewVoteRepository(),
+		comment: NewCommentRepository(),
 	}
 }
 
@@ -44,4 +46,8 @@ func (db *MockDatabase) GetPostRepository() core.PostRepository {
 
 func (db *MockDatabase) GetVoteRepository() core.VoteRepository {
 	return db.vote
+}
+
+func (db *MockDatabase) GetCommentRepository() core.CommentRepository {
+	return db.comment
 }

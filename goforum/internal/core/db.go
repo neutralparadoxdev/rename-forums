@@ -6,6 +6,7 @@ type Database interface {
 	GetForumRepository() ForumRepository
 	GetPostRepository() PostRepository
 	GetVoteRepository() VoteRepository
+	GetCommentRepository() CommentRepository
 	Init() error
 }
 
@@ -57,8 +58,11 @@ type CommentRepository interface {
 	NewComment(postId *int64, commentId *int64, userId int64, text string) (int64, error)
 
 	/// Patch a comment
-	PatchComment(commentId int64, text string)
+	PatchComment(userId int64, commentId int64, text string) (bool, error)
 
 	/// returns one or more comments
-	GetComment(commentId int64, depth int64) []*Comment
+	GetComment(commentId int64, depth int64) ([]Comment, error)
+
+	/// returns one or more comments for post
+	GetCommentForPost(postId int64, depth int64) ([]Comment, error)
 }

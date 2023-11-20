@@ -1,5 +1,7 @@
 package core
 
+import "time"
+
 type Comment struct {
 	Id int64
 
@@ -13,4 +15,11 @@ type Comment struct {
 
 	/// comment that owns this comment
 	CommentOwner *int64
+
+	/// user owner
+	Owner int64
+
+	CreatedAt time.Time
+
+	ModifiedAt time.Time
 }

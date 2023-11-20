@@ -13,4 +13,5 @@ type Post struct {
 	AuthorName      string
 	UpVote          int64
 	DownVote        int64
+	Comments        *[]Comment
 }
