@@ -22,4 +22,6 @@ type Comment struct {
 	CreatedAt time.Time
 
 	ModifiedAt time.Time
+
+	IsHidden bool
 }

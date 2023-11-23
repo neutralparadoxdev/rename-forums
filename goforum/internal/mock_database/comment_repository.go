@@ -33,6 +33,13 @@ func NewCommentRepository() *CommentRepository {
 		Id:           101,
 	}
 
+	comments[102] = core.Comment{
+		CommentOwner: num100ptr,
+		Text:         "This is a comment for Math 2",
+		Owner:        12,
+		Id:           102,
+	}
+
 	return &CommentRepository{
 		comments: comments,
 	}
@@ -84,7 +91,6 @@ func GetComments(id int64, depth int64, commentsOut *[]core.Comment, comments ma
 			if depth > 0 {
 				GetComments(val.Id, depth-1, commentsOut, comments)
 			}
-			return
 		}
 	}
 }
@@ -111,8 +117,9 @@ func (repo *CommentRepository) GetCommentForPost(postId int64, depth int64) ([]c
 	}
 	commentsFromDecendants := make([]core.Comment, 0)
 	for i := range commentsOut {
-		GetComments(commentsOut[i].Id, 2, &commentsFromDecendants, repo.comments)
+		GetComments(commentsOut[i].Id, 3, &commentsFromDecendants, repo.comments)
 	}
+
 	commentsOut = append(commentsOut, commentsFromDecendants...)
 	return commentsOut, nil
 }
