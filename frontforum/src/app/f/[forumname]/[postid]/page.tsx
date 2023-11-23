@@ -126,7 +126,7 @@ const PostPage: FC<PostPageProps> = () => {
 
     const sessionToken = GetSessionToken();
 
-    const [deletePostPrompt, setDeletePostPrompt] = useState<boolean>(true);
+    const [deletePostPrompt, setDeletePostPrompt] = useState<boolean>(false);
 
     const router = useRouter();
 
@@ -158,7 +158,6 @@ const PostPage: FC<PostPageProps> = () => {
             })
             .then(data => data.json())
             .then(data => {
-                console.log(data)
                 setIsLoading(false);
                 setPost(data);
             })
