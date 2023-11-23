@@ -19,3 +19,6 @@ behavior.
 ### fn OptionalAuth(authfunc, nonauthfunc) => handle(ctx) error
 
 ### fn OptionalAuth(authfunc) => handler(ctx) error 
+
+
+## Session Must be a part of the function call instead of being separate
