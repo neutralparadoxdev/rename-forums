@@ -2,7 +2,7 @@
 
 import { PostStub, PostStubProps } from './PostStub';
 
-import { useState, FC, useEffect } from 'react';
+import { useState, FC } from 'react';
 
 export type PostListProps = {
     posts: PostStubProps[]
