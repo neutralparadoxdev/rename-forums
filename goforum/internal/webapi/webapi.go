@@ -2,6 +2,7 @@ package webapi
 
 import (
 	"github.com/gofiber/fiber/v2" // swagger handler
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
 )
 
@@ -14,6 +15,14 @@ func (w *WebApi) Init(app *core.App) error {
 	w.fiberApp = fiber.New()
 
 	w.core = app
+
+	// Initialize default config (Assign the middleware to /metrics)
+	w.fiberApp.Get("/metrics", monitor.New())
+
+	// Or extend your config for customization
+	// Assign the middleware to /metrics
+	// and change the Title to `MyService Metrics Page`
+	w.fiberApp.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 
 	MountSession(w.fiberApp, app)
 	MountUser(w.fiberApp, app)
