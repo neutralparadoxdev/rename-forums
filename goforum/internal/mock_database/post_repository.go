@@ -26,6 +26,63 @@ func NewPostRepository(users *UserRepository) *PostRepository {
 		CreatedAt:       time.Now().Add(-1 * time.Minute),
 	}
 
+	posts[2] = core.Post{
+		Title: "Dev Markdown Example",
+		Body: `
+Some Demonstration Markdown
+
+# h1
+
+## h2
+
+### h3
+
+#### h4
+
+##### h5
+
+###### h6
+
+heading 1
+=========
+
+heading 2
+---------
+
+> This is a block
+> quote.
+
+1. List 1
+2. List 2
+3. List 3
+4. List 4
+5. List
+6. List
+7. List
+8. List
+9. List
+10. List
+
+- Another list
+- Together with a numbered list
+
+A paragraph
+
+A paragraph with *emphasis*
+
+Some more **emphasis**
+
+A [Link](http://google.com)
+
+Line ~~break~~
+`,
+		Id:              2,
+		ForumPostedName: "math",
+		OwnerId:         12,
+		AuthorName:      "hello",
+		CreatedAt:       time.Now(),
+	}
+
 	posts[10] = core.Post{
 		Title:           "Math second post",
 		Body:            "This is the body for the post",
