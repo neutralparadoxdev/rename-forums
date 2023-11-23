@@ -13,7 +13,8 @@ type ForumStubProps = {
 const ForumStub: FC<ForumStubProps>  = ({ title, description }: ForumStubProps) => {
     return (
         <li className="border-2 mt-2 grid grid-cols-[20%_90%]">
-            <span className="capitalize text-2xl mr-2 grid-col-1 hover:text-red-500"><a href={"/f/" + title}>{title}</a></span><span className="text mt-auto grid-col-2">{description}</span>
+            <span className="capitalize text-2xl mr-2 grid-col-1 ">
+                <a className="text-black hover:text-red-500" href={"/f/" + title}>{title}</a></span><span className="text mt-auto grid-col-2">{description}</span>
         </li>
     );
 }

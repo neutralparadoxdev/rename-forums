@@ -5,3 +5,45 @@
 * {
     box-sizing: border-box;
 }
+
+.list-style-inline {
+    list-style-position: inside;
+}
+
+
+@layer base {
+    h1 {
+        @apply text-4xl font-bold
+    }
+    h2 {
+        @apply text-2xl font-bold
+    }
+
+    h3 {
+        @apply text-xl font-bold
+    }
+
+    h4 {
+        @apply font-bold
+    }
+
+    h5 {
+        @apply font-bold
+    } 
+
+    h6 {
+        @apply font-bold
+    }
+
+    ol > li {
+        @apply list-decimal list-style-inline
+    }
+
+    ul > li {
+        @apply list-disc list-style-inline
+    }
+
+    a {
+        @apply font-bold text-red-400 hover:underline
+    }
+}

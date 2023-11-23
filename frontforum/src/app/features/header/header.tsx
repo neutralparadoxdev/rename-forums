@@ -84,8 +84,8 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             <></> }
     <header className="border-b-4 border-[blue] flex justify-between p-3">
         <div className="flex flex-row">
-        { link !== null ? <h1 className="capitalize text-3xl font-bold"><a href={link}> {title}</a></h1> 
-        : <h1 className="capitalize text-3xl font-bold">{title}</h1> }
+        { link !== null ? <h1 className=" capitalize text-3xl font-bold"><a className="text-black" href={link}> {title}</a></h1> 
+        : <h1 className="text-black capitalize text-3xl font-bold">{title}</h1> }
         <ForumDropDown />
         </div>
 
@@ -98,7 +98,7 @@ export const Header: FC<HeaderProps> = ({title, link, loginSignUpState, setLogin
             </> : 
             <>
             <div className="border-2 flex flex-col justify-center">
-                <Link className="text-center align-middle content-center" href="/forum/new">Create Forum</Link>
+                <Link className="text-black text-center align-middle content-center" href="/forum/new">Create Forum</Link>
             </div>
             <div className="border-2 align-middle flex flex-col justify-center"><p className="max-h-fit max-w-fit">{ `User: ${username}` }</p></div>
             <button className="border-2 p-1 hover:text-red-400" onClick={logout}>Logout</button>

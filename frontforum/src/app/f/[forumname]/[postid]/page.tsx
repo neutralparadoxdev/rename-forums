@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { GetSessionToken, SessionTokenExist } from "@/app/services/SessionManager/session";
+import Markdown from "react-markdown";
 
 type PostPageProps = {}
 
@@ -45,7 +46,7 @@ const PostEditor: FC<PostEditor> = ({title, body, id, author, form, update, clos
         e.preventDefault();
 
 
-        if (SessionTokenExist()) {
+        if (!SessionTokenExist()) {
             console.log("submit:no session")
             return
         }
@@ -100,11 +101,16 @@ const PostEditor: FC<PostEditor> = ({title, body, id, author, form, update, clos
         <label className="text-xl font-bold text-purple-700" htmlFor="body-edit">Body</label>
         <textarea 
             id="body-edit"
-            className="border-2 p-2 border-2 border-purple-700" 
+            className="border-2 p-4 border-2 border-purple-700" 
             onChange={(e) => setEditBody(e.target.value)}
             value={editBody} />
-        <button 
-            className="ml-auto mr-2 border-2 p-2 mt-2 w-32 border-purple-700 text-purple-700 hover:font-bold">Save</button>
+        <div className="ml-auto mr-2">
+            <button 
+                onClick={()  => close()}
+                className="mr-2 border-2 p-2 mt-2 w-32 border-purple-700 text-purple-700 hover:font-bold">Cancel</button>
+            <button 
+                className="border-2 p-2 mt-2 w-32 border-purple-700 text-purple-700 hover:font-bold">Save</button>
+        </div>
     </form>
 
     );
@@ -257,8 +263,8 @@ const PostPage: FC<PostPageProps> = () => {
                         : <></>
                     }
                 </div>
-                <h3 className="text-blue-400">By <a className="hover:text-red-400" href="/">{post.authorName}</a></h3>
-                <p className="border-2 p-4">{post.body}</p>
+                <h3 className="text-blue-400">By <a className="text-blue-400 hover:text-red-400" href="/">{post.authorName}</a></h3>
+                <Markdown className="border-2 p-4">{post.body}</Markdown>
                 </> }
                 <div className="mt-4 border-2 p-4">
                     <form className="min-w-full">
