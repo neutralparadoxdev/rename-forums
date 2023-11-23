@@ -218,90 +218,54 @@ func MountPost(router fiber.Router, app *core.App) {
 		}
 	})
 
-	group.Get("/:forumName/:id", func(c *fiber.Ctx) error {
-		stringId := c.Params("id")
+	group.Get("/:forumName/:id",
+		OptionalSessionAuth(app,
+			func(c *fiber.Ctx, session *core.Session) error {
+				stringId := c.Params("id")
 
-		id, err := strconv.ParseInt(stringId, 10, 64)
-		if err != nil {
-			return c.SendStatus(404)
-		}
-
-		forumName := c.Params("forumName")
-
-		session, webErr := CheckForSession(c, app.GetSessionManager())
-
-		if webErr != nil {
-			log.Print(webErr)
-			if webErr != &WebApiErrorServerError {
-				return c.SendStatus(fiber.StatusUnauthorized)
-			} else {
-				return c.SendStatus(500)
-			}
-		}
-
-		if session != nil {
-			userId, err := session.GetUserId()
-
-			if err != nil {
-				return c.SendStatus(500)
-			}
-
-			post, err := app.GetPostManager().GetPost(id, forumName, &userId)
-
-			if err != nil {
-				return c.SendStatus(500)
-			}
-
-			if post == nil {
-				return c.SendStatus(404)
-			}
-
-			type PostDTO struct {
-				Title      string    `json:"title"`
-				Body       string    `json:"body"`
-				AuthorName string    `json:"authorName"`
-				CreatedAt  time.Time `json:"createdAt"`
-			}
-
-			postdto := PostDTO{
-				Title:      post.Title,
-				Body:       post.Body,
-				AuthorName: post.AuthorName,
-				CreatedAt:  post.CreatedAt,
-			}
-
-			return c.JSON(postdto)
-		} else {
-			post, err := app.GetPostManager().GetPost(id, forumName, nil)
-
-			if err != nil {
-				if err.Error() == "user_cant_post" {
-					return c.SendStatus(401)
+				id, err := strconv.ParseInt(stringId, 10, 64)
+				if err != nil {
+					return c.SendStatus(404)
 				}
-				return c.SendStatus(500)
-			}
 
-			if post == nil {
-				return c.SendStatus(404)
-			}
+				forumName := c.Params("forumName")
 
-			type PostDTO struct {
-				Title      string    `json:"title"`
-				Body       string    `json:"body"`
-				AuthorName string    `json:"authorName"`
-				CreatedAt  time.Time `json:"createdAt"`
-			}
+				var userId int64
+				if session != nil {
+					userId, err = session.GetUserId()
 
-			postdto := PostDTO{
-				Title:      post.Title,
-				Body:       post.Body,
-				AuthorName: post.AuthorName,
-				CreatedAt:  post.CreatedAt,
-			}
+					if err != nil {
+						return c.SendStatus(500)
+					}
+				}
+				post, err := app.GetPostManager().GetPost(id, forumName, &userId, true)
 
-			return c.JSON(postdto)
-		}
-	})
+				if err != nil {
+					return c.SendStatus(500)
+				}
+
+				if post == nil {
+					return c.SendStatus(404)
+				}
+
+				type PostDTO struct {
+					Title      string    `json:"title"`
+					Body       string    `json:"body"`
+					AuthorName string    `json:"authorName"`
+					CreatedAt  time.Time `json:"createdAt"`
+					Comments   []CommentDTO
+				}
+
+				postdto := PostDTO{
+					Title:      post.Title,
+					Body:       post.Body,
+					AuthorName: post.AuthorName,
+					CreatedAt:  post.CreatedAt,
+					Comments:   commentsToCommentsDto(*post.Comments),
+				}
+
+				return c.JSON(postdto)
+			}))
 
 	group.Post("/", func(c *fiber.Ctx) error {
 

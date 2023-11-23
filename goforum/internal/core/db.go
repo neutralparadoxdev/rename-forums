@@ -6,6 +6,7 @@ type Database interface {
 	GetForumRepository() ForumRepository
 	GetPostRepository() PostRepository
 	GetVoteRepository() VoteRepository
+	GetCommentRepository() CommentRepository
 	Init() error
 }
 
@@ -48,4 +49,23 @@ type VoteRepository interface {
 	Vote(postId int64, userId int64, direction int64) (int64, error)
 
 	GetVotesForPosts(userId int64, postIds []int64) ([]int64, error)
+}
+
+type CommentRepository interface {
+	DeleteComment(userId int64, commentId int64) (bool, error)
+
+	/// Mark the comment as deleted
+	MarkDeleted(userId int64, commentId int64) (bool, error)
+
+	/// returns the new comment id or error
+	NewComment(postId *int64, commentId *int64, userId int64, text string) (int64, error)
+
+	/// Patch a comment
+	PatchComment(userId int64, commentId int64, text string) (bool, error)
+
+	/// returns one or more comments
+	GetComment(commentId int64, depth int64) ([]Comment, error)
+
+	/// returns one or more comments for post
+	GetCommentForPost(postId int64, depth int64) ([]Comment, error)
 }
