@@ -31,10 +31,6 @@ export const ForumDropDown: FC<{}> = () => {
 
     const [forumSelected, setForumSelect] = useState<string>("");
 
-    useEffect(() => {
-        console.log(`path: ${pathname}\nname: ${forumName}`)
-    })
-
     function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if(forumSelected === "home") {

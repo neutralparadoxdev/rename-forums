@@ -32,7 +32,6 @@ export const LoginComponent: FC<LoginComponentProps> = ({ close, swap, setAuthTo
             throw Error("response is not ok")
         })
         .then(data => {
-            console.log(data)
             SetSessionToken(data.token)
             SetUsername(data.username)
             setAuthToken(data.token)
