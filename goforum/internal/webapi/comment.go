@@ -27,6 +27,19 @@ func MountComment(router fiber.Router, app *core.App) {
 
 		session, webErr := CheckForSession(c, app.GetSessionManager())
 
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(401)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		if session == nil {
+			return c.SendStatus(401)
+		}
+
 		type NewCommentRequest struct {
 			Text string `json:"text" form:"text"`
 		}
@@ -35,15 +48,6 @@ func MountComment(router fiber.Router, app *core.App) {
 
 		if err := c.BodyParser(req); err != nil {
 			return c.SendStatus(400)
-		}
-
-		if webErr != nil {
-			log.Print(webErr)
-			if webErr != &WebApiErrorServerError {
-				return c.SendStatus(401)
-			} else {
-				return c.SendStatus(500)
-			}
 		}
 
 		newCommentId, err := app.GetCommentManager().CreateCommentForComment(*session, commentId, req.Text)
@@ -77,6 +81,10 @@ func MountComment(router fiber.Router, app *core.App) {
 			} else {
 				return c.SendStatus(500)
 			}
+		}
+
+		if session == nil {
+			return c.SendStatus(401)
 		}
 
 		type PatchComment struct {
@@ -140,5 +148,44 @@ func MountComment(router fiber.Router, app *core.App) {
 		}
 
 		return c.JSON(commentsToCommentsDto(comments))
+	})
+
+	group.Delete("/:forum/:postId/:commentId", func(c *fiber.Ctx) error {
+
+		commentId, err := strconv.ParseInt(c.Params("commentId"), 10, 64)
+
+		if err != nil {
+			return c.SendStatus(fiber.StatusNotFound)
+		}
+
+		session, webErr := CheckForSession(c, app.GetSessionManager())
+
+		if webErr != nil {
+			log.Print(webErr)
+			if webErr != &WebApiErrorServerError {
+				return c.SendStatus(401)
+			} else {
+				return c.SendStatus(500)
+			}
+		}
+
+		if session == nil {
+			return c.SendStatus(401)
+		}
+
+		ok, err := app.GetCommentManager().DeleteComment(*session, commentId)
+
+		if err != nil {
+			return c.SendStatus(500)
+		}
+
+		if ok {
+			return c.SendStatus(204)
+		} else {
+			return c.SendStatus(404)
+
+		}
+
+		return c.SendStatus(200)
 	})
 }

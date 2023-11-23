@@ -49,3 +49,13 @@ func (man *CommentManager) PatchComment(session Session, commentId int64, text *
 
 	return man.database.GetCommentRepository().PatchComment(userId, commentId, *text)
 }
+
+func (man *CommentManager) DeleteComment(session Session, commentId int64) (bool, error) {
+	userId, err := session.GetUserId()
+
+	if err != nil {
+		return false, errors.New("delete_comment: session_userid_error")
+	}
+
+	return man.database.GetCommentRepository().MarkDeleted(userId, commentId)
+}

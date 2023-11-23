@@ -123,3 +123,14 @@ func (repo *CommentRepository) GetCommentForPost(postId int64, depth int64) ([]c
 	commentsOut = append(commentsOut, commentsFromDecendants...)
 	return commentsOut, nil
 }
+
+func (repo *CommentRepository) MarkDeleted(userId int64, commentId int64) (bool, error) {
+	comment, exists := repo.comments[commentId]
+	if exists && comment.Owner == userId {
+		comment.WasDeleted = true
+		repo.comments[commentId] = comment
+		return true, nil
+	} else {
+		return false, nil
+	}
+}

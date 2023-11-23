@@ -54,6 +54,9 @@ type VoteRepository interface {
 type CommentRepository interface {
 	DeleteComment(userId int64, commentId int64) (bool, error)
 
+	/// Mark the comment as deleted
+	MarkDeleted(userId int64, commentId int64) (bool, error)
+
 	/// returns the new comment id or error
 	NewComment(postId *int64, commentId *int64, userId int64, text string) (int64, error)
 

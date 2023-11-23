@@ -24,4 +24,6 @@ type Comment struct {
 	ModifiedAt time.Time
 
 	IsHidden bool
+
+	WasDeleted bool
 }
