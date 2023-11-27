@@ -1,6 +1,6 @@
 import { SetSessionToken, SetUsername } from "@/app/services/SessionManager/session";
 import { useRouter } from "next/navigation";
-import { EventHandler, FC, FormEvent, FormEventHandler, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 
 export type LoginComponentProps = {
     swap: () => void

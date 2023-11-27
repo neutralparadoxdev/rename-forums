@@ -5,7 +5,7 @@ import { Header } from "@/app/features/header/header";
 import { LoadingComponent } from "@/app/features/loading/Loading";
 import { SignUpLoginModalPurpose } from "@/app/features/signup-login/SignUpLoginModal";
 import { usePathname } from "next/navigation";
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { GetSessionToken, SessionTokenExist } from "@/app/services/SessionManager/session";
 import Markdown from "react-markdown";
@@ -36,7 +36,7 @@ type PostEditor = {
     close: () => void
 }
 
-const PostEditor: FC<PostEditor> = ({title, body, id, author, form, update, close} : PostEditor) => {
+const PostEditor: FC<PostEditor> = ({title, body, id, form, update, close} : PostEditor) => {
     const [editTitle, setEditTitle] = useState<string>(title);
     const [editBody, setEditBody] = useState<string>(body);
 

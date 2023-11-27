@@ -60,7 +60,7 @@ export const SignUpComponent: FC<SignUpComponentProps> = ({close, swap} : SignUp
             <label htmlFor="password2" className="block">Password Confirmation</label>
             <input onChange={(e) => setPassword2(e.target.value)} value={password2} id="password2" className="block p-1" type="password" required/>
             <label htmlFor="eula" className="">Do you accept <a className="underline mr-2" href="">eula</a></label>
-            <input onChange={(e) => setEula((v) => !v)} checked={eula} id="eula" type="checkbox" required/>
+            <input onChange={(_) => setEula((v) => !v)} checked={eula} id="eula" type="checkbox" required/>
             <input className="p-2 bg-white block" type="submit" />
         </form>
         <p className="ml-auto mr-auto w-fit">Already have an account? <button onClick={swap} className="p-2 bg-white">Login</button></p>

@@ -1,9 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { PostList, PostListProps } from '../../features/PostList/PostList';
+import { PostList } from '../../features/PostList/PostList';
 import { usePathname } from 'next/navigation';
 import { LoadingComponent } from '@/app/features/loading/Loading';
-import { PostStubProps } from '@/app/features/PostList/PostStub';
 import { ErrorComponent } from '../../features/error/Error';
 import { Header } from '@/app/features/header/header';
 
@@ -81,6 +80,7 @@ export default function ForumPage() {
         });
       })
       .catch(err => {
+		console.log(err)
         setError("Not Found");
       })
       .finally(() => {
@@ -106,6 +106,7 @@ export default function ForumPage() {
         });
       })
       .catch(err => {
+		console.log(err)
         setError("Not Found");
       })
       .finally(() => {

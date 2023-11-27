@@ -7,10 +7,6 @@ export type PostStubProps = {
     subforum: string
 }
 
-function genLink(): string {
-    return ""
-}
-
 export const PostStub: React.FC<PostStubProps> = ({ title, authorName, subforum, id }: PostStubProps) => {
     return (
         <li 
