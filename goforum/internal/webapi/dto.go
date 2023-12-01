@@ -12,6 +12,7 @@ type CommentDTO struct {
 	PostOwner    string `json:"postOwner"`
 	Id           string `json:"id"`
 	WasDeleted   bool   `json:"was_deleted"`
+	Comments     []CommentDTO `json:"comments"`
 }
 
 func commentsToCommentsDto(comments []core.Comment) []CommentDTO {
@@ -34,6 +35,7 @@ func commentsToCommentsDto(comments []core.Comment) []CommentDTO {
 			PostOwner:    postOwner,
 			Id:           fmt.Sprintf("%d", comments[i].Id),
 			WasDeleted:   comments[i].WasDeleted,
+			Comments:     commentsToCommentsDto(comments[i].SubComments),
 		}
 		commentsDto = append(commentsDto, commentDto)
 	}

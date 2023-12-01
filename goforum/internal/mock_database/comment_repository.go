@@ -81,18 +81,24 @@ func (repo *CommentRepository) PatchComment(userId int64, commentId int64, text 
 	}
 }
 
-func GetComments(id int64, depth int64, commentsOut *[]core.Comment, comments map[int64]core.Comment) {
+/**
+ * Retrieves the comment list for the provided comment. Recursively does the same for the returned
+ * comments until depth is 0.
+*/
+func GetComments(id int64, depth int64, comments map[int64]core.Comment) []core.Comment {
 	if depth == 0 {
-		return
+		return make([]core.Comment, 0)
 	}
+	out := make([]core.Comment, 0)
 	for _, val := range comments {
 		if val.CommentOwner != nil && *val.CommentOwner == id {
-			*commentsOut = append(*commentsOut, val)
 			if depth > 0 {
-				GetComments(val.Id, depth-1, commentsOut, comments)
+				val.SubComments = GetComments(val.Id, depth-1, comments)
 			}
+			out = append(out, val)
 		}
 	}
+	return out
 }
 
 func (repo *CommentRepository) GetComment(commentId int64, depth int64) ([]core.Comment, error) {
@@ -100,7 +106,7 @@ func (repo *CommentRepository) GetComment(commentId int64, depth int64) ([]core.
 	if exists {
 		commentsOut := make([]core.Comment, 0)
 		commentsOut = append(commentsOut, val)
-		GetComments(commentId, depth, &commentsOut, repo.comments)
+		val.SubComments = GetComments(commentId, depth, repo.comments)
 		return commentsOut, nil
 	}
 
@@ -115,12 +121,10 @@ func (repo *CommentRepository) GetCommentForPost(postId int64, depth int64) ([]c
 			commentsOut = append(commentsOut, val)
 		}
 	}
-	commentsFromDecendants := make([]core.Comment, 0)
 	for i := range commentsOut {
-		GetComments(commentsOut[i].Id, 3, &commentsFromDecendants, repo.comments)
+		commentsOut[i].SubComments = GetComments(commentsOut[i].Id, 3, repo.comments)
 	}
 
-	commentsOut = append(commentsOut, commentsFromDecendants...)
 	return commentsOut, nil
 }
 
