@@ -253,7 +253,7 @@ func MountPost(router fiber.Router, app *core.App) {
 					Body       string    `json:"body"`
 					AuthorName string    `json:"authorName"`
 					CreatedAt  time.Time `json:"createdAt"`
-					Comments   []CommentDTO
+					Comments   []CommentDTO `json:"comments"`
 				}
 
 				postdto := PostDTO{
