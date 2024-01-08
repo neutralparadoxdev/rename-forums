@@ -1,8 +1,9 @@
 package postgresdb
 import (
 	"context"
-//	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
+
 	"log"
 )
 
@@ -20,6 +21,15 @@ func New(databaseUrl string) (*PostgresDatabase, error) {
 	return &PostgresDatabase{
 		conn: conn,
 	}, nil
+}
+
+
+func (db *PostgresDatabase) Init() error {
+	return nil
+}
+
+func (db *PostgresDatabase) GetUserRepository() core.UserRepository {
+	return NewUserRepository(db)
 }
 
 func (db *PostgresDatabase) Close() {
