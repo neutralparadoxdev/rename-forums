@@ -1,16 +1,17 @@
 package postgresdb
 import (
 	"context"
-	"github.com/jackc/pgx/v5"
+//	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 )
 
 type PostgresDatabase struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
 func New(databaseUrl string) (*PostgresDatabase, error) {
-	conn, err := pgx.Connect(context.Background(), databaseUrl)
+	conn, err := pgxpool.New(context.Background(), databaseUrl)
 
 	if err != nil {
 		log.Printf("Unable to connect to database")
@@ -22,5 +23,5 @@ func New(databaseUrl string) (*PostgresDatabase, error) {
 }
 
 func (db *PostgresDatabase) Close() {
-	db.conn.Close(context.Background())
+	db.conn.Close()
 }
