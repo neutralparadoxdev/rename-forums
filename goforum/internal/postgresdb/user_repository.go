@@ -16,7 +16,7 @@ func NewUserRepository(db *PostgresDatabase) *UserRepository {
 }
 
 func (repo *UserRepository) GetByName(username string) (*core.User, error) {
-		return nil, errors.New("Not Implemented")
+	return nil, errors.New("Not Implemented")
 }
 
 func (repo *UserRepository) GetByEmail(email string) (*core.User, error) {

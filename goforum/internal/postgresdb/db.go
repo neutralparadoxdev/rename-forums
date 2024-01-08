@@ -32,6 +32,10 @@ func (db *PostgresDatabase) GetUserRepository() core.UserRepository {
 	return NewUserRepository(db)
 }
 
+func (db *PostgresDatabase) GetCommentRepository() core.CommentRepository {
+	return NewCommentRepository(db)
+}
+
 func (db *PostgresDatabase) Close() {
 	db.conn.Close()
 }
