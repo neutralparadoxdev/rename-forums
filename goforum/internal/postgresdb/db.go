@@ -36,6 +36,14 @@ func (db *PostgresDatabase) GetCommentRepository() core.CommentRepository {
 	return NewCommentRepository(db)
 }
 
+func (db *PostgresDatabase) GetForumRepository() core.ForumRepository {
+	return NewForumRepository(db)
+}
+
+func (db *PostgresDatabase) GetPostRepository() core.PostRepository {
+	return NewPostRepository(db)
+}
+
 func (db *PostgresDatabase) Close() {
 	db.conn.Close()
 }
