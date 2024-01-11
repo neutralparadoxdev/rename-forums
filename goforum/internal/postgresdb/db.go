@@ -44,6 +44,10 @@ func (db *PostgresDatabase) GetPostRepository() core.PostRepository {
 	return NewPostRepository(db)
 }
 
+func (db *PostgresDatabase) GetVoteRepository() core.VoteRepository {
+	return NewVoteRepository(db)
+}
+
 func (db *PostgresDatabase) Close() {
 	db.conn.Close()
 }
