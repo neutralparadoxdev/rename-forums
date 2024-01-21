@@ -30,6 +30,7 @@ type UserRepository interface {
 	Delete(user User) error
 	Create(user User) (*User, error)
 	Save(user User) error
+	GetUserNamesForIds(ids []int64) map[int64]string
 }
 
 type PostRepository interface {

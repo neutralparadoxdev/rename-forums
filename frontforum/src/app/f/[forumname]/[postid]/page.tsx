@@ -9,6 +9,7 @@ import { FC, FormEvent, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { GetSessionToken, SessionTokenExist } from "@/app/services/SessionManager/session";
 import Markdown from "react-markdown";
+import { CommentSection } from "@/app/features/comments/CommentSection";
 
 type PostPageProps = {}
 
@@ -17,6 +18,7 @@ type PostResponse = {
     title: string,
     body: string,
     authorName: string,
+	comments: any,
 }
 
 function getForumPathParam(pathname : string) {
@@ -271,8 +273,8 @@ const PostPage: FC<PostPageProps> = () => {
                         <label className="block" htmlFor="comment-field" >Please Leave a comment</label>
                         <input id="comment-field" className="border-yellow-500 border-2 w-4/5 ml-auto mr-auto p-1" type="text" />
                     </form>
-                    <h4>Comments Go Here</h4>
                 </div>
+				<CommentSection comments={post.comments} />
             </main>
         </>
     ) : <></>;

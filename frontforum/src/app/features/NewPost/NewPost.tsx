@@ -10,7 +10,6 @@ export type NewPostProps = {
 
 export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostProps) => {
     const router = useRouter();
-    if (forums.length === 0) return <></>;
 
     const [toggle, setToggle] = useState<boolean>(false);
     const [postText, setPostText] = useState<string>("");
@@ -55,6 +54,9 @@ export const NewPost: FC<NewPostProps> = ({ forums, rows, showLogin } : NewPostP
             })
         }
     }
+
+
+    if (forums.length === 0) return <></>;
 
     return (
 

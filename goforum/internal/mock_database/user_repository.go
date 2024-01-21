@@ -83,3 +83,20 @@ func (repo *UserRepository) Create(user core.User) (*core.User, error) {
 func (repo *UserRepository) Save(user core.User) error {
 	return nil
 }
+
+func (repo *UserRepository) GetUserNamesForIds(ids []int64) map[int64]string {
+	out := make(map[int64]string)
+	
+	for i := range ids {
+		out[ids[i]] = ""
+	}
+
+	for _,v := range repo.users {
+		_, ok := out[v.UserId]
+
+		if ok {
+			out[v.UserId] = v.Username
+		}
+	}
+	return out
+}

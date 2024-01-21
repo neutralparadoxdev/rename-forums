@@ -1,6 +1,9 @@
 package core
 
-import "errors"
+import ( 
+	"errors"
+	"log"
+)
 
 type CommentManager struct {
 	database Database
@@ -33,7 +36,36 @@ func (man *CommentManager) CreateCommentForComment(session Session, commentId in
 }
 
 func (man *CommentManager) GetCommentWithUserSession(commentId int64, postId int64, forum string, session *Session) ([]Comment, error) {
-	return man.database.GetCommentRepository().GetComment(commentId, 3)
+	comments, err := man.database.GetCommentRepository().GetComment(commentId, 3)
+
+	if err != nil {
+		return nil, err
+	}
+
+	userSet := make(map[int64]bool)
+
+	commentStack := make([]*Comment, 0)
+	
+	for len(commentStack) > 0 {
+		comment := commentStack[len(commentStack)-1]
+
+		userSet[comment.Owner] = true
+
+		if comment.SubComments == nil {
+			continue
+		}
+
+		for i := range comment.SubComments {
+			commentStack = append(commentStack, &comment.SubComments[i])
+		}
+	}
+	
+	for k, _ := range userSet {
+		log.Printf("%d\n", k)
+	}
+
+
+	return comments, nil
 }
 
 func (man *CommentManager) PatchComment(session Session, commentId int64, text *string) (bool, error) {

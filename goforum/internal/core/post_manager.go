@@ -3,6 +3,7 @@ package core
 import (
 	"errors"
 	"sort"
+	"log"
 )
 
 type PostManager struct {
@@ -70,6 +71,75 @@ func (man *PostManager) GetPost(id int64, forumName string, userId *int64, inclu
 		if err != nil {
 			return nil, errors.New("get_post: Could not retrieve comments")
 		}
+
+		userSet := make(map[int64]bool)
+
+		commentStack := make([]*Comment, 0)
+
+		for i := range comments {
+			commentStack = append(commentStack, &comments[i])
+		}
+
+		for len(commentStack) > 0 {
+			log.Printf("comment stack size: %d", len(commentStack))
+			comment := commentStack[len(commentStack)-1]
+
+			commentStack = commentStack[0:len(commentStack)-1]
+	
+			userSet[comment.Owner] = true
+	
+			if comment.SubComments == nil {
+				continue
+			}
+	
+			for i := range comment.SubComments {
+				commentStack = append(commentStack, &comment.SubComments[i])
+			}
+		}
+	
+		log.Printf("USER IDS")
+		for k, _ := range userSet {
+			log.Printf("%d\n", k)
+		}
+
+		ids := make([]int64, 0, 10)
+
+		for k, _ := range userSet {
+			ids = append(ids, k)
+		}
+
+		usernames := man.db.GetUserRepository().GetUserNamesForIds(ids)
+
+		for k, v := range usernames {
+			log.Printf("%d, %s", k, v)
+		}
+
+
+		commentStack = make([]*Comment, 0)
+
+		for i := range comments {
+			commentStack = append(commentStack, &comments[i])
+		}
+
+		for len(commentStack) > 0 {
+			comment := commentStack[len(commentStack)-1]
+
+
+			copy := usernames[comment.Owner]
+
+			comment.Username = &copy
+
+			commentStack = commentStack[0:len(commentStack)-1]
+	
+			if comment.SubComments == nil {
+				continue
+			}
+	
+			for i := range comment.SubComments {
+				commentStack = append(commentStack, &comment.SubComments[i])
+			}
+		}
+
 		post.Comments = &comments
 	}
 

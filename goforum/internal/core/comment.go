@@ -53,6 +53,8 @@ func (b *CommentBuilder) Make() Comment {
 type Comment struct {
 	Id int64
 
+	Username *string
+
 	Text string
 
 	// comments under this comment
