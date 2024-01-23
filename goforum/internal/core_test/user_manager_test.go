@@ -71,6 +71,7 @@ func TestUserManagerGetUserByName(t *testing.T) {
 		t.Errorf("did not expect error")
 	}
 
+
 	if user == nil {
 		t.Errorf("did not expect user to be nil")
 	}
