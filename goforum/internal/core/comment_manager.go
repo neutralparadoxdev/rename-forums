@@ -19,7 +19,7 @@ func (man *CommentManager) CreateCommentForPost(session Session, postId int64, t
 	userId, err := session.GetUserId()
 
 	if err != nil {
-		return 0, errors.New("create_comment_for_posts: session_userid_error")
+		return 0, errors.Join(errors.New("create_comment_for_posts: session_userid_error"), err)
 	}
 
 	return man.database.GetCommentRepository().NewComment(&postId, nil, userId, text)

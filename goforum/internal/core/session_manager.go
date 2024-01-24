@@ -50,7 +50,7 @@ func (man *SessionManager) CreateSession(username string, password string) (Sess
 				return Session{}, errors.New("create_session:SignedToken:Wrong key type")
 			}
 
-			session := Session{Session: tokenString, Token: token}
+			session := Session{Session: tokenString, Token: nil}
 
 			man.sessionRepository.Save(session)
 

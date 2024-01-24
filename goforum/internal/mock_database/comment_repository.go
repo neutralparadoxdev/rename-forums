@@ -58,6 +58,10 @@ func (repo *CommentRepository) DeleteComment(userId int64, commentId int64) (boo
 func (repo *CommentRepository) NewComment(postId *int64, commentId *int64, userId int64, text string) (int64, error) {
 	id := rand.Int63()
 
+	for id == 0 {
+		id = rand.Int63()
+	}
+
 	newComment := core.Comment{
 		PostOwner:    postId,
 		CommentOwner: commentId,

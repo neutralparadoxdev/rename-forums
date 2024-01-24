@@ -23,7 +23,22 @@ func (session *Session) ToString() string {
 }
 
 func (session *Session) GetUserId() (int64, error) {
-	if claims, ok := session.Token.Claims.(jwt.MapClaims); ok && session.Token.Valid {
+
+	if session.Token == nil {
+		return 0, errors.New("session::GetUserId: session.Token is nil")
+	} 
+	claims, ok := session.Token.Claims.(jwt.MapClaims) 
+
+	if !ok {
+		return 0, errors.New("session::GetUserId: Token::Claims not ok")
+	}
+
+	if !session.Token.Valid {
+		return 0, errors.New("session::GetUserId: Not Valid")
+	}
+
+
+	if ok && session.Token.Valid {
 		res, err := strconv.ParseInt(claims["userId"].(string), 10, 64)
 		if err != nil {
 			return 0, err
