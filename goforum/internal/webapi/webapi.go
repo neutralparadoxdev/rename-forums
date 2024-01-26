@@ -40,6 +40,6 @@ func (w *WebApi) Init(app *core.App) error {
 
 func (w *WebApi) Run() error {
 	log.Println("WebApi::Run: Starting Listening")
-	w.fiberApp.Listen(":3001")
+	log.Println(w.fiberApp.Listen(":3001"))
 	return nil
 }
