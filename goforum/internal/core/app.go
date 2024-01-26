@@ -21,6 +21,7 @@ type App struct {
 }
 
 func (app *App) Init(config AppConfig) error {
+	log.Print("App::Init: Initialization Starting")
 	if app.ApiDriver != nil {
 		if err := app.ApiDriver.Init(app); err != nil {
 			log.Fatal(err)
@@ -36,11 +37,13 @@ func (app *App) Init(config AppConfig) error {
 	app.VoteManager = NewVoteManager(app.Database)
 	app.CommentManager = NewCommentManager(app.Database)
 
+	log.Print("App::Init: Initialization Done")
 	return nil
 }
 
 func (app *App) Run() {
 	if app.ApiDriver != nil {
+		log.Println("App::Run: ApiDriver Running")
 		app.ApiDriver.Run()
 	}
 }

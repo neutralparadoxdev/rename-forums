@@ -9,7 +9,7 @@ type UserRepository struct {
 	db *PostgresDatabase
 }
 
-func NewUserRepository(db *PostgresDatabase) *UserRepository {
+func NewUserRepository(db *PostgresDatabase) core.UserRepository {
 	return &UserRepository{
 		db: db,
 	}
@@ -38,3 +38,9 @@ func (repo *UserRepository) Create(user core.User) (*core.User, error) {
 func (repo *UserRepository) Save(user core.User) error {
 	return errors.New("Not Implemented")
 }
+
+func (repo *UserRepository) GetUserNamesForIds(ids []int64) map[int64]string {
+	return nil
+}
+
+

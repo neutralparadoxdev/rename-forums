@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2" // swagger handler
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
+	"log"
 )
 
 type WebApi struct {
@@ -12,6 +13,7 @@ type WebApi struct {
 }
 
 func (w *WebApi) Init(app *core.App) error {
+	log.Println("WebApi::Init: Initializing")
 	w.fiberApp = fiber.New()
 
 	w.core = app
@@ -32,10 +34,12 @@ func (w *WebApi) Init(app *core.App) error {
 	MountMe(w.fiberApp, app)
 	MountComment(w.fiberApp, app)
 
+	log.Println("WebApi::Init: Initialization Done")
 	return nil
 }
 
 func (w *WebApi) Run() error {
+	log.Println("WebApi::Run: Starting Listening")
 	w.fiberApp.Listen(":3001")
 	return nil
 }
