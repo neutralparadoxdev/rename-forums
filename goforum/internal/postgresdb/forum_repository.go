@@ -3,6 +3,8 @@ package postgresdb
 import (
 	"github.com/neutralparadoxdev/rename-forums/goforum/internal/core"
 	"errors"
+	"log"
+	"context"
 )
 
 type ForumRepository struct {
@@ -16,7 +18,16 @@ func NewForumRepository(db *PostgresDatabase) core.ForumRepository {
 }
 
 func (repo *ForumRepository) GetByName(name string) (*core.Forum, error) {
-	return nil, errors.New("Not implemented")
+
+	var forum core.Forum
+
+	err := repo.db.pool.QueryRow(context.Background(), "SELECT * FROM forum WHERE title = $1", name).Scan(&forum.Title, &forum.Description, &forum.IsPublic)
+	if err != nil {
+		log.Printf("QueryRow failed: %v\n", err)
+		return nil, errors.New("GetByName:Query Row failed")
+	}
+
+	return &forum, nil
 }
 
 func (repo *ForumRepository) Delete(forum core.Forum) error {

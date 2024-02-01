@@ -8,18 +8,18 @@ import (
 )
 
 type PostgresDatabase struct {
-	conn *pgxpool.Pool
+	pool *pgxpool.Pool
 }
 
 func New(databaseUrl string) (*PostgresDatabase, error) {
-	conn, err := pgxpool.New(context.Background(), databaseUrl)
+	pool, err := pgxpool.New(context.Background(), databaseUrl)
 
 	if err != nil {
 		log.Printf("Unable to connect to database")
 		return nil, err
 	}
 	return &PostgresDatabase{
-		conn: conn,
+		pool: pool,
 	}, nil
 }
 
@@ -49,7 +49,7 @@ func (db *PostgresDatabase) GetVoteRepository() core.VoteRepository {
 }
 
 func (db *PostgresDatabase) Close() {
-	db.conn.Close()
+	db.pool.Close()
 }
 
 func (db *PostgresDatabase) GetSessionRepository() core.SessionRepository {
