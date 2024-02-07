@@ -17,6 +17,13 @@ The intended purpose of the backend is to provide an easy way to pull and push d
 and storage. Information pushed will be stored and events will be pushed to clients to indicate
 the client should refresh. An optional live feed may be desirable in the future.
 
+### Database
+
+The Database is currently being implemented as an adapter for postgresql. Sessions will be stored
+in postgresql. Due to current architecture, sessions are tied to Database interface in core. In
+order to allow for separate database for sessions, such as Redis, Database interface needs to be 
+refactored with another layer in core allowing for mix matching database adapters.
+
 #### REST API
 
 The REST api will provide access to all information stored in storage. 
