@@ -31,7 +31,15 @@ func (repo *ForumRepository) GetByName(name string) (*core.Forum, error) {
 }
 
 func (repo *ForumRepository) Delete(forum core.Forum) error {
-	return errors.New("Not Implemented")
+	commandTag, err := repo.db.pool.Exec(context.Background(), "DELETE FROM forum WHERE title = $", forum.Title)
+
+	if err != nil {
+		return err
+	}
+	if commandTag.RowsAffected() != 1 {
+		return errors.New("No row deleted")
+	}
+	return nil
 }
 
 func (repo *ForumRepository) Create(title string, description string, ownerId int64, isPublic bool) error {
